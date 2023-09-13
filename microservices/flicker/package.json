@@ -1,5 +1,5 @@
 {
-  "name": "@nats-micro-monitor/frontend",
+  "name": "@nats-micro-monitor/flicker",
   "version": "1.0.0",
   "description": "",
   "main": "src/index",

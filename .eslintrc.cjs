@@ -161,6 +161,8 @@ module.exports = {
     'import/no-extraneous-dependencies': 'off',
     'dot-notation': 'off',
     'no-case-declarations': 'off',
+    'no-useless-constructor': 'off',
+    'no-empty-function': 'off',
     semi: 'error',
     'no-lonely-if': 'off',
     '@typescript-eslint/no-inferrable-types': 'off',

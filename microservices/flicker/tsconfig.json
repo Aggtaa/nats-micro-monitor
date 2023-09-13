@@ -1,15 +1,18 @@
 {
   "compilerOptions": {
-    "target": "ES6",
-    "rootDir": ".",
+    "target": "es2020",
+    "rootDir": "src",
     "outDir": "dist",
-    "module": "ES6",
+    "module": "Node16",
     "sourceMap": false,
     "esModuleInterop": true,
     "experimentalDecorators": true,
+    "resolveJsonModule": true,
     "lib": [ "es5", "es6", "es2020", "DOM", "DOM.Iterable" ],
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "strict": true
   },
+  "include": ["src/**/*.ts"],
   "exclude": ["node_modules", ".eslintrc.js"],
   "ts-node": {
     "esm": true,
