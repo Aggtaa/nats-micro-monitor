@@ -1,5 +1,5 @@
 {
-  "name": "@timetracker/types-lib",
+  "name": "@nats-micro-monitor/types",
   "version": "1.0.0",
   "description": "",
   "main": "src/index",

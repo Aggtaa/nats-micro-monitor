@@ -18,7 +18,7 @@
     "xtest": "npx nyc --reporter=html ts-mocha"
   },
   "dependencies": {
-    "@timetracker/types-lib": "*",
+    "@nats-micro-monitor/types": "*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
