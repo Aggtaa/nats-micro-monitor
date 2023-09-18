@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "es2020",
-    "rootDir": ".",
+    "rootDir": "src",
     "outDir": "dist",
     "module": "Node16",
     "sourceMap": false,
@@ -10,7 +10,7 @@
     "resolveJsonModule": true,
     "lib": [ "es5", "es6", "es2020", "DOM", "DOM.Iterable" ],
     "skipLibCheck": true,
-    "strict": true,
+    "strict": true
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules", ".eslintrc.js"],

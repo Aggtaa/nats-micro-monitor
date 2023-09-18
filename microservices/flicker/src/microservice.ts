@@ -1,5 +1,7 @@
 import { Health } from '@nats-micro-monitor/types';
-import { microservice, method, z, Microservice } from 'nats-micro';
+import {
+  microservice, method, z, Microservice,
+} from 'nats-micro';
 import { clearInterval } from 'timers';
 
 const flickerMicroserviceStatusSchema = z.object({
