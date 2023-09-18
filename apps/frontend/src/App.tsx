@@ -1,42 +1,63 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Breadcrumb, Layout, Menu, theme } from 'antd'
+import { Pages } from './pages'
 
-function App() {
-    const [count, setCount] = useState(0)
+const { Header, Content, Footer } = Layout
+
+const App: React.FC = () => {
+    const {
+        token: { colorBgContainer },
+    } = theme.useToken()
 
     return (
-        <>
-            <div>
-                <a href="https://vitejs.dev" target="_blank">
-                    <img src={viteLogo} className="logo" alt="Vite logo" />
-                </a>
-                <a href="https://react.dev" target="_blank">
-                    <img src={reactLogo} className="logo react" alt="React logo" />
-                </a>
-            </div>
-            <h1>Vite + React</h1>
-            <div className="card">
-                <button onClick={() => setCount((count) => count + 1)}>
-                    count is {count}
-                </button>
-                <p>
-                    Edit <code>src/App.tsx</code> and save to test HMR
-                </p>
-            </div>
-            <p className="read-the-docs">
-                Click on the Vite and React logos to learn more
-            </p>
+        <Layout className="layout">
+            <Header style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="demo-logo" >
+                    Nats Micro Monitor
+                </div>
 
-            <ul>
-                <li>asdjfasdj</li>
-                <li>sdfljasd</li>
-                <li>fsdggfsdf</li>
-                <li>dfgsdflgksjdfgn</li>
-                <li>fdsgksjdfgnsdfg</li>
-            </ul>
-        </>
+                <Menu
+                    theme="dark"
+                    mode="horizontal"
+                    defaultSelectedKeys={['2']}
+                    items={[
+                        {
+                            key: '1',
+                            label: 'Home',
+                        },
+                        {
+                            key: '2',
+                            label: 'List',
+                        },
+                        {
+                            key: '3',
+                            label: 'Status',
+                        },
+                        {
+                            key: '4',
+                            label: 'About',
+                        },
+                    ]}
+                />
+            </Header>
+
+            <Content style={{ padding: '0 50px' }}>
+                <Breadcrumb
+                    style={{ margin: '16px 0' }}
+                    items={[
+                        { title: 'Home' },
+                        { title: 'List' },
+                    ]}
+                />
+
+                <div className="site-layout-content" style={{ background: colorBgContainer }}>
+                    <Pages />
+                </div>
+            </Content>
+
+            <Footer style={{ textAlign: 'center' }}>
+                Nats Micro Monitor v1.0.0
+            </Footer>
+        </Layout>
     )
 }
 

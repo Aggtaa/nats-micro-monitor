@@ -1,0 +1,19 @@
+.HeaderStatus {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: gray;
+    margin: 4px auto;
+}
+
+.HeaderStatus_green {
+    background: green;
+}
+
+.HeaderStatus_yellow {
+    background: yellow;
+}
+
+.HeaderStatus_red {
+    background: red;
+}
