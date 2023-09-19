@@ -28,7 +28,7 @@
   ],
   "dependencies": {
     "@prisma/client": "^5.2.0",
-    "nats-micro": "^0.15.0"
+    "nats-micro": "^0.17.0"
   },
   "devDependencies": {
     "@types/chai": "^4.2.11",

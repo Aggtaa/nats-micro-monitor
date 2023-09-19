@@ -1,5 +1,3 @@
-export type Health = {
-  value: 'green' | 'yellow' | 'red';
-  numericValue?: number;
-  reason?: string;
-}
+export * from './health';
+export * from './http';
+export * from './webMonitor';

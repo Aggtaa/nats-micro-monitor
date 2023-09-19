@@ -1,0 +1,36 @@
+{
+  "name": "@nats-micro-monitor/http-gateway",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index",
+  "scripts": {
+    "start": "sh -ac '. ../../.env; ts-node --esm src/index.ts'",
+    "lint": "eslint . --ext .ts,.tsx",
+    "test": "npx nyc --reporter=html ts-mocha"
+  },
+  "type": "module",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@nats-micro-monitor/types": "*",
+    "body-parser": "^1.20.2",
+    "debug-threads-ns": "^0.2.2",
+    "express": "^4.18.2"
+  },
+  "mocha": {
+    "spec": "tests",
+    "extension": [
+      "ts"
+    ],
+    "ignore": [
+      "**/*.include.ts"
+    ],
+    "recursive": true,
+    "asyncOnly": true,
+    "exit": true,
+    "timeout": 10000,
+    "fullTrace": true,
+    "bail": true
+  }
+}
