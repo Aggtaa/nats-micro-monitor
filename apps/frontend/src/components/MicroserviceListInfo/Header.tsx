@@ -13,7 +13,7 @@ export const Header = () => {
                 <th>
                     Instance ID
                 </th>
-                <th>
+                <th style={{ width: '100%' }}>
                     Descriptionm
                 </th>
                 <th>
@@ -29,7 +29,7 @@ export const Header = () => {
                     Info
                 </th>
                 <th>
-                    Stats
+                    Status
                 </th>
                 <th style={{ textAlign: 'center' }}>
                     [Start/Stop]

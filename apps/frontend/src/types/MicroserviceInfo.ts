@@ -1,18 +1,20 @@
 export interface MicroserviceInfo {
     firstFoundAt: string;
     lastFoundAt: string;
-    name: string;
-    id: string;
-    version: string;
-    description: string;
-    endpoints: EndpointInfo[];
+    info: {
+        name: string;
+        id: string;
+        version: string;
+        description: string;
+        endpoints: EndpointInfo[];
 
-    // todo:
-    healthStatus: {
-        value: number;
-    };
+        // todo:
+        healthStatus: {
+            value: number;
+        };
 
-    status: number;
+        status: number;
+    }
 }
 
 export interface EndpointInfo {

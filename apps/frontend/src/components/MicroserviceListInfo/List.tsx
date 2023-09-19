@@ -23,42 +23,36 @@ export const List = (props: Props) => {
                 <td style={{ whiteSpace: "nowrap" }}>
                     {time}
                 </td>
-                <td>
-                    {item.name}
+                <td style={{ whiteSpace: "nowrap" }}>
+                    {item.info.name}
                 </td>
                 <td>
-                    {item.id}
+                    {item.info.id}
                 </td>
                 <td>
-                    {item.description}
+                    {item.info.description}
                 </td>
                 <td style={{ textAlign: 'center' }}>
-                    {item.version}
+                    {item.info.version}
                 </td>
                 <td style={{ textAlign: 'center' }}>
                     30ms
                 </td>
+
                 <td>
-                    <HealthStatus status={item.healthStatus.value} />
+                    <HealthStatus status={item?.info?.healthStatus?.value} />
                 </td>
+
                 <td style={{ textAlign: 'center' }}>
                     <a href="#">Info</a>
                 </td>
                 <td style={{ textAlign: 'center' }}>
-                    <a href="#">Stats</a>
+                    <a href="#">Status</a>
                 </td>
                 <td style={{ textAlign: 'center' }}>
-                    {(item.status == 0) && (
-                        <Button type="primary" style={{ background: '#00b96b' }}>
-                            Start
-                        </Button>
-                    )}
-
-                    {(item.status != 0) && (
-                        <Button type="primary" danger>
-                            Stop
-                        </Button>
-                    )}
+                    <Button type="primary" danger>
+                        Stop
+                    </Button>
                 </td>
                 <td style={{ textAlign: 'center' }}>
                     <Button type="primary" danger>

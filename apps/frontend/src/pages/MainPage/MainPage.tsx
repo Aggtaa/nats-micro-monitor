@@ -13,6 +13,8 @@ export const MainPage = () => {
                 const response = await fetch(url)
                 const json = await response.json()
 
+                // {error: "Cannot read properties of undefined (reading 'endpoints')"}
+
                 setData(json)
             } catch (error) {
                 console.log("error", error)
