@@ -1,6 +1,7 @@
 import express from 'express';
-import { Broker, Monitor } from 'nats-micro';
+import { Broker, Microservice, Monitor } from 'nats-micro';
 
+import { HttpGatewayMicroservice } from './microservice.js';
 import { Router } from './router.js';
 
 (async () => {
@@ -13,9 +14,17 @@ import { Router } from './router.js';
 
   await broker.connect();
 
+  const sysBroker = new Broker({
+    servers: process.env.NATS_URL,
+    user: process.env.NATS_SYSTEM_USERNAME,
+    pass: process.env.NATS_SYSTEM_PASSWORD,
+  });
+
+  await sysBroker.connect();
+
   const router = new Router(broker);
 
-  const monitor = new Monitor(broker);
+  const monitor = new Monitor(broker, sysBroker);
 
   monitor.on('added', (service) => {
     router.addServiceRoutes(service);
@@ -32,6 +41,10 @@ import { Router } from './router.js';
   });
 
   monitor.startPeriodicDiscovery(60000, 10000);
+
+  const service = new HttpGatewayMicroservice();
+  service.start(router);
+  Microservice.createFromClass(broker, service);
 
   const app = express();
 

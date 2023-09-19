@@ -1,25 +1,13 @@
+import { HttpEndpoint } from '@nats-micro-monitor/types';
 import { threadContext } from 'debug-threads-ns';
 import { Request, Response, NextFunction } from 'express';
 import {
   MicroserviceInfo, MethodInfo, Broker, wrapMethod,
 } from 'nats-micro';
-
-import { debug } from './debug.js';
 import { join } from 'path';
 import { isUndefined } from 'util';
 
-type HttpEndpoint = {
-  microservice: MicroserviceInfo;
-  microserviceEndpoint: MethodInfo;
-  domain?: string;
-  path: string;
-  methods: string[];
-}
-
-type MethodMatch = {
-  domain: string;
-  method: MethodInfo;
-}
+import { debug } from './debug.js';
 
 export type HttpRequest = {
   domain: string,
@@ -27,6 +15,14 @@ export type HttpRequest = {
   method: string,
   headers: Record<string, string>,
   body: string,
+}
+
+export type Route = {
+  path: string,
+  methods: string,
+  domain: string,
+  microservice: string,
+  endpoint: string,
 }
 
 export class Router {
@@ -81,23 +77,24 @@ export class Router {
     );
   }
 
-  public serveRoutes(req: Request, res: Response): void {
+  public get routes(): Route[] {
     const routes = this.methods
       .map((m) => ({
         path: m.path,
-        methods: m.methods,
+        methods: m.methods.join('|'),
         domain: m.domain,
-        microservice: {
-          name: m.microservice.name,
-          id: m.microservice.id,
-          endpoint: m.microserviceEndpoint.name,
-        },
+        microservice: m.microservice.name,
+        endpoint: m.microserviceEndpoint.name,
       }));
 
-    res.json(routes);
+    return routes;
   }
 
-  private matchMethod(req: Request, method: HttpEndpoint): MethodMatch | undefined {
+  public serveRoutes(req: Request, res: Response): void {
+    res.json(this.routes);
+  }
+
+  private matchMethod(req: Request, method: HttpEndpoint): MethodInfo | undefined {
     if ((method.domain ?? '') !== this.domain)
       return undefined;
 
@@ -110,31 +107,38 @@ export class Router {
     )
       return undefined;
 
-    return {
-      domain: this.domain,
-      method: method.microserviceEndpoint,
-    };
+    return method.microserviceEndpoint;
   }
 
-  private forwardToService(req: Request, res: Response, method: MethodMatch) {
+  private forwardToService(req: Request, res: Response, method: MethodInfo) {
+
+    const start = process.hrtime.bigint();
 
     const replyToSubj = this.broker.createInbox();
+
+    const measureTime = () => Math.floor(Number(process.hrtime.bigint() - start) / 100000) / 10;
+
+    const closeConnection = () => {
+      debug.web.thread.info(`Request closed in ${measureTime()}ms`);
+      res.end();
+    };
 
     const handler = wrapMethod(
       this.broker,
       (data) => {
+        debug.web.thread.info(`Recevied microservice response in ${measureTime()}ms`);
         res.send(data);
-        res.end();
+        closeConnection();
         this.broker.off(replyToSubj, handler);
       },
-      method.method.subject,
+      method.subject,
     );
     this.broker.on(replyToSubj, handler);
 
     const headers = Object.entries(req.headers)
       .map(([k, v]) => ([k, [String(v)]] as [string, string[]]));
     this.broker.send(
-      method.method.subject,
+      method.subject,
       {
 
         headers: req.headers,
@@ -167,10 +171,10 @@ export class Router {
 
   makeEndpoint(
     microservice: MicroserviceInfo,
-    microserviceEnpoint: MethodInfo,
+    microserviceEndpoint: MethodInfo,
   ): HttpEndpoint | undefined {
 
-    const meta = microserviceEnpoint.metadata;
+    const meta = microserviceEndpoint.metadata;
 
     const path = meta['nats-micro.v1.http.endpoint.path'];
 
@@ -187,7 +191,7 @@ export class Router {
 
     return {
       microservice,
-      microserviceEndpoint: microserviceEnpoint,
+      microserviceEndpoint,
       domain,
       path: join('/', microservice.name, path),
       methods,
