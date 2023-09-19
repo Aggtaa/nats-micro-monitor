@@ -33,16 +33,23 @@ export class WebMonitorMicroservice {
     this.monitor = monitor;
 
     this.microserviceStats = new MicroserviceStatsCollector(this.broker);
+    this.microserviceHealth = new MicroserviceHealthCollector(this.broker);
+    this.microserviceStatus = new MicroserviceStatusCollector(this.broker);
+    this.microserviceRtt = new MicroserviceRttCollector(this.broker);
 
     this.monitor.on('added', (service) => {
       console.log(`SERVICE ADDED: ${service.name}.${service.id}`);
+      this.microserviceStats.collect();
+      this.microserviceHealth.collect(service);
+      this.microserviceStatus.collect(service);
+      this.microserviceRtt.collect();
     });
-    monitor.on('removed', (service) => {
-      console.log(`SERVICE REMOVED: ${service.name}.${service.id}`);
+    monitor.on('removed', () => {
+      // console.log(`SERVICE REMOVED: ${service.name}.${service.id}`);
     });
-    monitor.on('change', (services) => {
-      console.log(`SERVICES: ${JSON.stringify(services)}`);
-    });
+    // monitor.on('change', (services) => {
+    //   console.log(`SERVICES: ${services.map((s) => `${s.name}.${s.id}`)}`);
+    // });
   }
 
   @method({
@@ -56,10 +63,10 @@ export class WebMonitorMicroservice {
         this.monitor.services
           .map((ms) => {
             const { firstFoundAt, lastFoundAt, ...info } = ms;
-            const stats = this.microserviceStats.getById(ms.id);
-            const health = this.microserviceHealth.getById(ms.id);
-            const status = this.microserviceStatus.getById(ms.id);
-            const rtt = this.microserviceRtt.getById(ms.id);
+            const stats = this.microserviceStats?.getById(ms.id);
+            const health = this.microserviceHealth?.getById(ms.id);
+            const status = this.microserviceStatus?.getById(ms.id);
+            const rtt = this.microserviceRtt?.getById(ms.id);
 
             return {
               firstFoundAt,

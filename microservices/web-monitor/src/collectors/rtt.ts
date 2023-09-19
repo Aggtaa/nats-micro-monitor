@@ -1,4 +1,4 @@
-import { Broker } from 'nats-micro';
+import { Broker, MicroservicePing } from 'nats-micro';
 
 import { MicroserviceInfoCollector } from './base.js';
 
@@ -14,7 +14,7 @@ export class MicroserviceRttCollector extends MicroserviceInfoCollector<number> 
     this.broker.on(this.inbox, this.handleResponse.bind(this));
   }
 
-  public collectAll(): void {
+  protected collectAll(): void {
 
     this.startTime = process.hrtime.bigint();
 
@@ -25,11 +25,12 @@ export class MicroserviceRttCollector extends MicroserviceInfoCollector<number> 
     );
   }
 
-  public collect(id: string): void {
-    throw new Error('Method not implemented.');
+  public collect(): void {
+    this.collectAll();
   }
 
-  private handleResponse(res: unknown): void {
-    console.dir({ ping: res });
+  private handleResponse({ data }: { data: MicroservicePing }): void {
+    const time = Number(process.hrtime.bigint() - this.startTime);
+    this.save(data.id, Math.round(time / 1000) / 1000);
   }
 }

@@ -1,4 +1,4 @@
-import { Broker } from 'nats-micro';
+import { Broker, MicroserviceInfo } from 'nats-micro';
 
 import { MicroserviceInfoCollector } from './base.js';
 
@@ -14,12 +14,17 @@ export class MicroserviceStatusCollector
     this.broker.on(this.inbox, this.handleResponse.bind(this));
   }
 
-  public collectAll(): void {
+  protected collectAll(): void {
     throw new Error('Method not implemented.');
   }
 
-  public collect(id: string): void {
-    // TODO
+  public async collect(service: MicroserviceInfo): Promise<void> {
+    const endpoint = service.endpoints.find((ep) => ep.name === 'status');
+    if (!endpoint)
+      return;
+
+    const result = await this.broker.request(endpoint.subject, '') as Record<string, unknown>;
+    this.save(service.id, result);
   }
 
   private handleResponse(res: unknown): void {

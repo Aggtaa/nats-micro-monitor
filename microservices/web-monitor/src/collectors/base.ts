@@ -1,3 +1,5 @@
+import { MicroserviceInfo } from 'nats-micro';
+
 export abstract class MicroserviceInfoCollector<T> {
 
   private items: Record<string, T> = {};
@@ -6,9 +8,9 @@ export abstract class MicroserviceInfoCollector<T> {
     this.items = {};
   }
 
-  public abstract collectAll(): void;
+  protected abstract collectAll(): void;
 
-  public abstract collect(id: string): void;
+  public abstract collect(service: MicroserviceInfo): void;
 
   public getById(id: string): T | undefined {
     return this.items[id];

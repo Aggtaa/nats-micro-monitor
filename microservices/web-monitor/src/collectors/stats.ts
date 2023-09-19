@@ -1,4 +1,4 @@
-import { Broker, MicroserviceStats } from 'nats-micro';
+import { Broker, MicroserviceInfo, MicroserviceStats } from 'nats-micro';
 
 import { MicroserviceInfoCollector } from './base.js';
 
@@ -13,7 +13,7 @@ export class MicroserviceStatsCollector extends MicroserviceInfoCollector<Micros
     this.broker.on(this.inbox, this.handleResponse.bind(this));
   }
 
-  public collectAll(): void {
+  protected collectAll(): void {
     this.broker.send(
       '$SRV.STATS',
       '',
@@ -21,11 +21,11 @@ export class MicroserviceStatsCollector extends MicroserviceInfoCollector<Micros
     );
   }
 
-  public collect(id: string): void {
-    throw new Error('Method not implemented.');
+  public collect(): void {
+    this.collectAll();
   }
 
-  private handleResponse(res: unknown): void {
-    console.dir({ stats: res });
+  private handleResponse({ data }: { data: MicroserviceStats }): void {
+    this.save(data.id, data);
   }
 }

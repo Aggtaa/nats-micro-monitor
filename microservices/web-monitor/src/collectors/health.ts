@@ -1,5 +1,5 @@
 import { Health } from '@nats-micro-monitor/types';
-import { Broker } from 'nats-micro';
+import { Broker, MicroserviceInfo } from 'nats-micro';
 
 import { MicroserviceInfoCollector } from './base.js';
 
@@ -14,12 +14,17 @@ export class MicroserviceHealthCollector extends MicroserviceInfoCollector<Healt
     this.broker.on(this.inbox, this.handleResponse.bind(this));
   }
 
-  public collectAll(): void {
+  protected collectAll(): void {
     throw new Error('Method not implemented.');
   }
 
-  public collect(id: string): void {
-    // TODO
+  public async collect(service: MicroserviceInfo): Promise<void> {
+    const endpoint = service.endpoints.find((ep) => ep.name === 'health');
+    if (!endpoint)
+      return;
+
+    const result = await this.broker.request(endpoint.subject, '') as Health;
+    this.save(service.id, result);
   }
 
   private handleResponse(res: unknown): void {
