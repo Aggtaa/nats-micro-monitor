@@ -1,9 +1,11 @@
 .HeaderStatus {
+    display: inline-block;
     width: 15px;
     height: 15px;
     border-radius: 50%;
     background: gray;
-    margin: 4px auto;
+    margin: 0;
+    vertical-align: middle;
 }
 
 .HeaderStatus_green {

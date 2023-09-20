@@ -44,7 +44,7 @@ export const List = (props: Props) => {
                     {item.rtt}
                 </td>
 
-                <td>
+                <td style={{ textAlign: 'center' }}>
                     <HealthStatus status={item?.health} />
                 </td>
 

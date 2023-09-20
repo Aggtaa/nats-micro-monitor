@@ -18,9 +18,32 @@ export const StatusPage = observer(({ id }: Props) => {
 
     return (
         <div>
-            <div>StatusPage: {id}</div>
+            <ul
+                style={{
+                    listStyleType: 'none',
+                    padding: '20px'
+                }}
+            >
+                <li>
+                    <b>name:</b> {data?.info.name}
+                </li>
 
-            <div>{data?.info.name}</div>
+                <li>
+                    <b>id</b>: {id}
+                </li>
+
+                <li>
+                    <b>version</b>: {data?.info.version}
+                </li>
+
+                <li>
+                    <b>status</b>:
+
+                    <div style={{ whiteSpace: 'pre-wrap' }}>
+                        {JSON.stringify(data?.status, null, 4)}
+                    </div>
+                </li>
+            </ul>
         </div>
     )
 })

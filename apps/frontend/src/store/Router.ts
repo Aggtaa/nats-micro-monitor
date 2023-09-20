@@ -61,16 +61,16 @@ export class Router {
         switch (route.name) {
             case RouteName.HOME:
                 return {
-                    name: RouteName.HOME,
+                    page: RouteName.HOME,
                 }
             case RouteName.INFO:
                 return {
-                    name: RouteName.INFO,
+                    page: RouteName.INFO,
                     id: route.id,
                 }
             case RouteName.STATUS:
                 return {
-                    name: RouteName.STATUS,
+                    page: RouteName.STATUS,
                     id: route.id,
                 }
             default:
