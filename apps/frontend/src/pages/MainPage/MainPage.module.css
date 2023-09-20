@@ -4,11 +4,11 @@
 
 .Header {
     margin-bottom: 10px;
+}
 
-    & th {
-        padding: 10px;
-        text-align: left;
-    }
+.Header th {
+    padding: 10px;
+    text-align: left;
 }
 
 .Content {
@@ -16,9 +16,7 @@
     margin-bottom: 10px; */
 }
 
-.ListItem {
-    & td {
-        padding: 10px;
-        /* vertical-align: top; */
-    }
+.ListItem td {
+    padding: 10px;
+    /* vertical-align: top; */
 }
