@@ -176,7 +176,7 @@ export class Router {
 
     const meta = microserviceEndpoint.metadata;
 
-    const path = meta['nats-micro.v1.http.endpoint.path'];
+    const path = meta?.['nats-micro.v1.http.endpoint.path'];
 
     if (isUndefined(path))
       return undefined;

@@ -15,6 +15,7 @@
   "dependencies": {
     "@nats-micro-monitor/types": "*",
     "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
     "debug-threads-ns": "^0.2.2",
     "express": "^4.18.2"
   },

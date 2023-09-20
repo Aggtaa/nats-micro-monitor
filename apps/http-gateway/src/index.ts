@@ -1,3 +1,4 @@
+import cors from 'cors';
 import express from 'express';
 import { Microservice, Monitor, NatsBroker } from 'nats-micro';
 
@@ -47,6 +48,8 @@ import { Router } from './router.js';
   Microservice.createFromClass(broker, service);
 
   const app = express();
+
+  app.use(cors());
 
   app.use(router.middleware.bind(router));
 
