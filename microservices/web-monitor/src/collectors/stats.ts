@@ -1,4 +1,4 @@
-import { Broker, MicroserviceInfo, MicroserviceStats } from 'nats-micro';
+import { Broker, MicroserviceStats } from 'nats-micro';
 
 import { MicroserviceInfoCollector } from './base.js';
 

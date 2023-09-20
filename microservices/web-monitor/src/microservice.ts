@@ -59,26 +59,33 @@ export class WebMonitorMicroservice {
   })
   public async services(): Promise<string> {
     try {
-      return JSON.stringify(
-        this.monitor.services
-          .map((ms) => {
-            const { firstFoundAt, lastFoundAt, ...info } = ms;
-            const stats = this.microserviceStats?.getById(ms.id);
-            const health = this.microserviceHealth?.getById(ms.id);
-            const status = this.microserviceStatus?.getById(ms.id);
-            const rtt = this.microserviceRtt?.getById(ms.id);
+      const services = this.monitor.services
+        .map((ms) => {
+          const {
+            firstFoundAt, lastFoundAt, connection, ...info
+          } = ms;
+          const stats = this.microserviceStats?.getById(ms.id);
+          const health = this.microserviceHealth?.getById(ms.id);
+          const status = this.microserviceStatus?.getById(ms.id);
+          const rtt = this.microserviceRtt?.getById(ms.id);
 
-            return {
-              firstFoundAt,
-              lastFoundAt,
-              info,
-              stats,
-              health,
-              status,
-              rtt,
-            } as MonitoredMicroservice;
-          }),
+          return {
+            firstFoundAt,
+            lastFoundAt,
+            info,
+            stats,
+            health,
+            status,
+            rtt,
+            connection,
+          } as MonitoredMicroservice;
+        });
+
+      services.sort(
+        (a, b) => a.info.name.localeCompare(b.info.name) * 100 + a.info.id.localeCompare(b.info.id),
       );
+
+      return JSON.stringify(services);
     }
     catch (err) {
       console.error(err);

@@ -31,6 +31,6 @@ export class MicroserviceRttCollector extends MicroserviceInfoCollector<number> 
 
   private handleResponse({ data }: { data: MicroservicePing }): void {
     const time = Number(process.hrtime.bigint() - this.startTime);
-    this.save(data.id, Math.round(time / 1000) / 1000);
+    this.save(data.id, Math.round(time / 1000));
   }
 }
