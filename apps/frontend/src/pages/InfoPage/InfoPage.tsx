@@ -11,7 +11,7 @@ export const InfoPage = observer(({ id }: Props) => {
     if (!id) {
         return (
             <div>
-                error no id
+                Error, microservice ID not found
             </div>
         )
     }

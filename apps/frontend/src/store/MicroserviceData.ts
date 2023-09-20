@@ -6,8 +6,6 @@ const url = "./services.json"
 export class MicroserviceData {
     constructor() {
         makeObservable(this)
-
-        console.log('microservice data')
     }
 
     @observable data: MonitoredMicroservice[] = []

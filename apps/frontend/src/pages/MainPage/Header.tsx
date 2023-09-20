@@ -17,11 +17,11 @@ export const Header = () => {
                 </th>
 
                 <th style={{ width: '100%' }}>
-                    Descriptionm
+                    Description
                 </th>
 
                 <th>
-                    Verion
+                    Version
                 </th>
 
                 <th>
