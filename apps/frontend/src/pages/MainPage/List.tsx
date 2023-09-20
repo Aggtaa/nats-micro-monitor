@@ -40,7 +40,7 @@ export const List = (props: Props) => {
                     {item.info.description}
                 </td>
 
-                <td>
+                <td style={{ textAlign: 'center' }}>
                     {item.info.version}
                 </td>
 
