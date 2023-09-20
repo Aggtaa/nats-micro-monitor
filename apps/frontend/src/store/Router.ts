@@ -32,7 +32,6 @@ export class Router {
         makeObservable(this)
 
         window.addEventListener('hashchange', this.handleUrlChange)
-        // eventMessenger().routing.on(this.handleUiRouting, true)
 
         this.handleUrlChange()
     }
@@ -51,8 +50,6 @@ export class Router {
 
     private handleUrlChange = (): void => {
         const query = queryString.parse(location.hash.substring(1))
-
-        console.log('query', query)
 
         this.changeRoute(this.queryStringToRoute(query))
     }
