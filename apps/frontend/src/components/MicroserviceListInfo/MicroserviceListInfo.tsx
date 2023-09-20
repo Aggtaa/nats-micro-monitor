@@ -1,12 +1,11 @@
-import { MicroserviceInfo } from "../../types/MicroserviceInfo"
-
 import { List } from "./List"
 import { Header } from "./Header"
+import { MonitoredMicroservice } from "@nats-micro-monitor/types"
 
 import styles from './MicroserviceListInfo.module.css'
 
 interface Props {
-    items: MicroserviceInfo[]
+    items: MonitoredMicroservice[]
 }
 
 export const MicroserviceListInfo = (props: Props) => {

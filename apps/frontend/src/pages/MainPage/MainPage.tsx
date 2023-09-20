@@ -1,34 +1,15 @@
-import { useEffect, useState } from "react"
-import { MicroserviceInfo } from "../../types/MicroserviceInfo"
+import { observer } from "mobx-react"
+import { MonitoredMicroservice } from "@nats-micro-monitor/types"
 import { MicroserviceListInfo } from "../../components/MicroserviceListInfo"
 
-export const MainPage = () => {
-    const [data, setData] = useState<MicroserviceInfo[]>([] as MicroserviceInfo[])
+interface Props {
+    data: MonitoredMicroservice[]
+}
 
-    useEffect(() => {
-        const url = "./services.json"
-
-        const fetchData = async () => {
-            try {
-                const response = await fetch(url)
-                const json = await response.json()
-
-                // {error: "Cannot read properties of undefined (reading 'endpoints')"}
-
-                setData(json)
-            } catch (error) {
-                console.log("error", error)
-            }
-        }
-
-        fetchData()
-    }, [])
-
-    console.log('data', data)
-
+export const MainPage = observer(({ data }: Props) => {
     return (
         <div>
             <MicroserviceListInfo items={data} />
         </div>
     )
-}
+})

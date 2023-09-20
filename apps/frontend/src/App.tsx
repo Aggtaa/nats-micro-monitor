@@ -1,5 +1,10 @@
-import { Breadcrumb, Layout, Menu, theme } from 'antd'
+import { Layout, theme } from 'antd'
+import { Breadcrumb } from './components/Breadcrumb'
 import { Pages } from './pages'
+import { HeaderMenu } from './components/HeaderMenu'
+import { Logo } from './components/Logo'
+
+import './App.css'
 
 const { Header, Content, Footer } = Layout
 
@@ -11,43 +16,13 @@ const App: React.FC = () => {
     return (
         <Layout className="layout">
             <Header style={{ display: 'flex', alignItems: 'center' }}>
-                <div className="demo-logo" >
-                    Nats Micro Monitor
-                </div>
+                <Logo />
 
-                <Menu
-                    theme="dark"
-                    mode="horizontal"
-                    defaultSelectedKeys={['2']}
-                    items={[
-                        {
-                            key: '1',
-                            label: 'Home',
-                        },
-                        {
-                            key: '2',
-                            label: 'List',
-                        },
-                        {
-                            key: '3',
-                            label: 'Status',
-                        },
-                        {
-                            key: '4',
-                            label: 'About',
-                        },
-                    ]}
-                />
+                <HeaderMenu />
             </Header>
 
             <Content style={{ padding: '0 50px' }}>
-                <Breadcrumb
-                    style={{ margin: '16px 0' }}
-                    items={[
-                        { title: 'Home' },
-                        { title: 'List' },
-                    ]}
-                />
+                <Breadcrumb />
 
                 <div className="site-layout-content" style={{ background: colorBgContainer }}>
                     <Pages />

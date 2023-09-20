@@ -1,17 +1,20 @@
 import classNames from 'classnames'
+import { Health } from '@nats-micro-monitor/types';
 
 import styles from './HealthStatus.module.css'
 
 interface Props {
-    status: number;
+    status?: Health;
 }
 
 export const HealthStatus = ({ status }: Props) => {
+    const { value } = status || {}
+
     const className = classNames({
         [styles.HeaderStatus]: true,
-        [styles.HeaderStatus_green]: status == 1,
-        [styles.HeaderStatus_yellow]: status == 2,
-        [styles.HeaderStatus_red]: status == 3,
+        [styles.HeaderStatus_green]: value == 'green',
+        [styles.HeaderStatus_yellow]: value == 'yellow',
+        [styles.HeaderStatus_red]: value == 'red',
     })
 
     return (
