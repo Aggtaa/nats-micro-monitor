@@ -5,6 +5,10 @@ export const Header = () => {
         <thead className={styles.Header}>
             <tr>
                 <th>
+                    #
+                </th>
+
+                <th>
                     LastFoundAt
                 </th>
 
@@ -40,13 +44,9 @@ export const Header = () => {
                     Status
                 </th>
 
-                <th style={{ textAlign: 'center' }}>
-                    [Start/Stop]
-                </th>
+                <th style={{ textAlign: 'center' }} />
 
-                <th style={{ textAlign: 'center' }}>
-                    [Restart]
-                </th>
+                <th style={{ textAlign: 'center' }} />
             </tr>
         </thead>
     )

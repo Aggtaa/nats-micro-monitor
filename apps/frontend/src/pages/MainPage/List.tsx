@@ -20,6 +20,10 @@ export const List = (props: Props) => {
                 key={index}
                 className={styles.ListItem}
             >
+                <th>
+                    {index + 1}
+                </th>
+
                 <td style={{ whiteSpace: "nowrap" }}>
                     {time}
                 </td>
