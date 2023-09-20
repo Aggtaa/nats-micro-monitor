@@ -18,19 +18,21 @@ export class FlickerMicroservice {
   private timesFlicked: number = 0;
   private currentHealth: Health['value'] = 'green';
   private flickTimer: NodeJS.Timer;
-  private deathTimer: NodeJS.Timer;
+  private deathTimer: NodeJS.Timer | undefined;
 
   public constructor(
     interval: number = 5, // seconds
-    lifeSpan: number = 300, // seconds
+    lifeSpan: number = -1, // seconds
   ) {
     this.flickTimer = setInterval(this.do.bind(this), interval * 1000);
-    this.deathTimer = setTimeout(this.die.bind(this), lifeSpan * 1000);
+    if (lifeSpan > 0)
+      this.deathTimer = setTimeout(this.die.bind(this), lifeSpan * 1000);
   }
 
   public async stop(): Promise<void> {
     clearInterval(this.flickTimer);
-    clearTimeout(this.deathTimer);
+    if (this.deathTimer)
+      clearTimeout(this.deathTimer);
 
     if (this.microservice)
       await this.microservice.stop();

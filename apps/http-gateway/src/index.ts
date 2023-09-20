@@ -1,12 +1,12 @@
 import express from 'express';
-import { Broker, Microservice, Monitor } from 'nats-micro';
+import { Microservice, Monitor, NatsBroker } from 'nats-micro';
 
 import { HttpGatewayMicroservice } from './microservice.js';
 import { Router } from './router.js';
 
 (async () => {
 
-  const broker = new Broker({
+  const broker = new NatsBroker({
     servers: process.env.NATS_URL,
     user: process.env.NATS_USERNAME,
     pass: process.env.NATS_PASSWORD,
@@ -14,7 +14,7 @@ import { Router } from './router.js';
 
   await broker.connect();
 
-  const sysBroker = new Broker({
+  const sysBroker = new NatsBroker({
     servers: process.env.NATS_URL,
     user: process.env.NATS_SYSTEM_USERNAME,
     pass: process.env.NATS_SYSTEM_PASSWORD,
