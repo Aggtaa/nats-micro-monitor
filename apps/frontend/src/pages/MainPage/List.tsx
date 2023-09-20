@@ -1,9 +1,9 @@
 import { Button } from "antd"
 import { MonitoredMicroservice } from "@nats-micro-monitor/types"
 
-import { HealthStatus } from "../HealthStatus"
+import { HealthStatus } from "../../components"
 
-import styles from './MicroserviceListInfo.module.css'
+import styles from './MainPage.module.css'
 
 interface Props {
     items: MonitoredMicroservice[]
@@ -36,12 +36,12 @@ export const List = (props: Props) => {
                     {item.info.description}
                 </td>
 
-                <td style={{ textAlign: 'center' }}>
+                <td>
                     {item.info.version}
                 </td>
 
-                <td style={{ textAlign: 'center' }}>
-                    30ms
+                <td>
+                    {item.rtt}
                 </td>
 
                 <td>

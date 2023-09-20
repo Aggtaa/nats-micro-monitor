@@ -1,4 +1,4 @@
-import styles from './MicroserviceListInfo.module.css'
+import styles from './MainPage.module.css'
 
 export const Header = () => {
     return (
