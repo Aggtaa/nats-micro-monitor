@@ -4,9 +4,7 @@ export const Header = () => {
     return (
         <thead className={styles.Header}>
             <tr>
-                <th>
-                    #
-                </th>
+                <th />
 
                 <th>
                     LastFoundAt
