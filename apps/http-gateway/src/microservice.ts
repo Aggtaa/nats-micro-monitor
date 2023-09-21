@@ -11,7 +11,7 @@ const statusSchema = z.object({
 
 type Status = z.infer<typeof statusSchema>;
 
-@microservice()
+@microservice({ version: '0.15.1', description: 'NATS Microservice HTTP gateway' })
 export class HttpGatewayMicroservice {
 
   public __microservice: Microservice | undefined;

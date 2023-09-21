@@ -15,7 +15,7 @@ const statusSchema = z.object({
 
 type Status = z.infer<typeof statusSchema>;
 
-@microservice()
+@microservice({ version: '0.12.0', description: 'NATS Microservice Monitor - backend' })
 export class WebMonitorMicroservice {
 
   public __microservice: Microservice | undefined;
