@@ -8,8 +8,6 @@ export abstract class MicroserviceInfoCollector<T> {
     this.items = {};
   }
 
-  protected abstract collectAll(): void;
-
   public abstract collect(service: MicroserviceInfo): void;
 
   public getById(id: string): T | undefined {

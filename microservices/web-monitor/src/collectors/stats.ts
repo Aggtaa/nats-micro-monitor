@@ -1,31 +1,19 @@
 import { Broker, MicroserviceStats } from 'nats-micro';
 
-import { MicroserviceInfoCollector } from './base.js';
+import { AddressMicroserviceCollector } from './address.js';
 
-export class MicroserviceStatsCollector extends MicroserviceInfoCollector<MicroserviceStats> {
+export class MicroserviceStatsCollector
+  extends AddressMicroserviceCollector<MicroserviceStats, void> {
 
-  private readonly inbox: string;
-
-  constructor(private readonly broker: Broker) {
-    super();
-
-    this.inbox = this.broker.createInbox();
-    this.broker.on(this.inbox, this.handleResponse.bind(this));
+  constructor(broker: Broker) {
+    super(broker, '$SRV.STATS');
   }
 
-  protected collectAll(): void {
-    this.broker.send(
-      '$SRV.STATS',
-      '',
-      { replyTo: this.inbox },
-    );
+  protected prepareRequest(): void {
+    return undefined;
   }
 
-  public collect(): void {
-    this.collectAll();
-  }
-
-  private handleResponse({ data }: { data: MicroserviceStats }): void {
-    this.save(data.id, data);
+  protected processRequest(service: MicroserviceStats): void {
+    this.save(service.id, service);
   }
 }

@@ -39,10 +39,10 @@ export class WebMonitorMicroservice {
 
     this.monitor.on('added', (service) => {
       console.log(`SERVICE ADDED: ${service.name}.${service.id}`);
-      this.microserviceStats.collect();
+      this.microserviceStats.collect(service);
       this.microserviceHealth.collect(service);
       this.microserviceStatus.collect(service);
-      this.microserviceRtt.collect();
+      this.microserviceRtt.collect(service);
     });
     monitor.on('removed', () => {
       // console.log(`SERVICE REMOVED: ${service.name}.${service.id}`);
