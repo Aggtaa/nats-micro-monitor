@@ -4,6 +4,7 @@ import { HealthStatus, Ping, JsonPreview } from "../../components"
 import { toDate } from "../../utils/timeConverter"
 
 import pageStyles from '../Page.module.css'
+import { PropertyPreview } from "../../components/PropertyPreview"
 
 interface Props {
     id?: string;
@@ -22,13 +23,7 @@ export const InfoPage = observer(({ id }: Props) => {
 
     const firstFoundAt = toDate(data?.firstFoundAt)
     const lastFoundAt = toDate(data?.lastFoundAt)
-
-    const endpoints = data?.info?.endpoints.map((val, index) => {
-        return {
-            ...val,
-            ...data?.stats?.endpoints[index]
-        }
-    })
+    const inlineDescription = (data?.info.description.length || 0) <= 100
 
     return (
         <div className={pageStyles.Container}>
@@ -37,79 +32,101 @@ export const InfoPage = observer(({ id }: Props) => {
                     padding: '20px'
                 }}
             >
-                <div>
-                    <b>name:</b> {data?.info.name}
-                </div>
+                <h3>general</h3>
 
-                <div>
-                    <b>id</b>: {id}
-                </div>
+                <PropertyPreview
+                    label="name"
+                    value={data?.info.name}
+                    inline
+                />
 
-                <div>
-                    <b>version</b>: {data?.info.version}
-                </div>
+                <PropertyPreview
+                    label="id"
+                    value={id}
+                    inline
+                />
 
-                <div>
-                    <b>firstFoundAt</b>: {firstFoundAt}
-                </div>
+                <PropertyPreview
+                    label="version"
+                    value={data?.info.version}
+                    inline
+                />
 
-                <div>
-                    <b>lastFoundAt</b>: {lastFoundAt}
-                </div>
+                <PropertyPreview
+                    label="firstFoundAt"
+                    value={firstFoundAt}
+                    inline
+                />
 
-                <div>
-                    <b>health</b>: <HealthStatus status={data?.health} />
-                </div>
+                <PropertyPreview
+                    label="lastFoundAt"
+                    value={lastFoundAt}
+                    inline
+                />
 
-                <div>
-                    <b>ping</b>: <Ping value={data?.rtt} />
-                </div>
+                <PropertyPreview
+                    label="health"
+                    inline
+                >
+                    <HealthStatus status={data?.health} />
+                </PropertyPreview>
 
-                <div>
-                    <b>metadata</b>:
+                <PropertyPreview
+                    label="ping"
+                    inline
+                >
+                    <Ping value={data?.rtt} />
+                </PropertyPreview>
 
-                    <div style={{ whiteSpace: 'pre-wrap' }}>
-                        <JsonPreview value={data?.info.metadata} />
-                    </div>
-                </div>
+                <PropertyPreview
+                    label="lastFoundAt"
+                    value={lastFoundAt}
+                    inline
+                />
 
-                <div>
-                    <h3>info</h3>
+                <PropertyPreview label="metadata">
+                    <JsonPreview value={data?.info.metadata} />
+                </PropertyPreview>
 
-                    <div>
-                        <b>type</b>: {data?.info.type}
-                    </div>
+                <h3>info</h3>
 
-                    {data?.info.description && (
-                        <div>
-                            <b>description</b>:
+                <PropertyPreview
+                    label="type"
+                    value={data?.info.type}
+                    inline
+                />
 
-                            <div style={{ whiteSpace: 'pre-wrap' }}>
-                                {data?.info.description}
-                            </div>
-                        </div>
-                    )}
-                </div>
+                <PropertyPreview
+                    label="description"
+                    value={data?.info.description}
+                    inline={inlineDescription}
+                />
 
-                <div>
+                {data?.stats && (
                     <h3>stats</h3>
+                )}
 
-                    <div>
-                        <b>type</b>: {data?.stats?.type}
-                    </div>
+                <PropertyPreview
+                    label="type"
+                    value={data?.stats?.type}
+                    inline
+                />
 
-                    <div>
-                        <b>started</b>: {toDate(data?.stats?.started)}
-                    </div>
-                </div>
+                <PropertyPreview
+                    label="started"
+                    value={toDate(data?.stats?.started)}
+                    inline
+                />
 
-                <div>
-                    <h3>endpoints</h3>
+                <h3>endpoints</h3>
 
-                    <div style={{ whiteSpace: 'pre-wrap' }}>
-                        <JsonPreview value={endpoints} />
-                    </div>
-                </div>
+                <PropertyPreview label="info">
+                    <JsonPreview value={data?.info.endpoints} />
+                </PropertyPreview>
+
+                <PropertyPreview label="stats">
+                    <JsonPreview value={data?.stats?.endpoints} />
+                </PropertyPreview>
             </div>
         </div>
     )

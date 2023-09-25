@@ -46,8 +46,6 @@ export const Header = () => {
                 </th>
 
                 <th style={{ textAlign: 'center' }} />
-
-                <th style={{ textAlign: 'center' }} />
             </tr>
         </thead>
     )

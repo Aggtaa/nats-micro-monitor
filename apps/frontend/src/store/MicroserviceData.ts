@@ -1,5 +1,5 @@
-import { MonitoredMicroservice } from "@nats-micro-monitor/types"
 import { action, observable, makeObservable } from "mobx"
+import { MonitoredMicroservice } from "@nats-micro-monitor/types"
 
 const URL_SERVICES = import.meta.env.VITE_API_SERVICES_HOST
 const URL_DISCOVER = import.meta.env.VITE_API_DISCOVER_HOST
@@ -17,8 +17,8 @@ export class MicroserviceData {
 
     @observable data: MonitoredMicroservice[] = []
 
-    @action setData(value: MonitoredMicroservice[]) {
-        this.data = value
+    @action setData(data: MonitoredMicroservice[] = []) {
+        this.data = data
     }
 
     fetchDiscover = async () => {

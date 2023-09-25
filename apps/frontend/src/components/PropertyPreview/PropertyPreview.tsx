@@ -9,6 +9,10 @@ interface Props {
 }
 
 export const PropertyPreview = ({ label, value, inline, children }: Props) => {
+    if (!value && !children) {
+        return
+    }
+
     const className = classNames({
         [styles.Container]: true,
         [styles.Container_inline]: inline
@@ -17,7 +21,7 @@ export const PropertyPreview = ({ label, value, inline, children }: Props) => {
     return (
         <div className={className}>
             <div className={styles.Label}>
-                {label}
+                {label}:
             </div>
 
             <div className={styles.Value}>

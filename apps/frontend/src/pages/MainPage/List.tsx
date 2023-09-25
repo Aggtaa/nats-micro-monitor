@@ -67,12 +67,6 @@ export const List = (props: Props) => {
                         Stop
                     </Button>
                 </td>
-
-                <td style={{ textAlign: 'center' }}>
-                    <Button type="primary" danger>
-                        Restart
-                    </Button>
-                </td>
             </tr>
         )
     })
