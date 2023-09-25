@@ -1,11 +1,7 @@
+import { UserConnection } from '@nats-micro-monitor/types';
 import { NatsBroker, Message } from 'nats-micro';
 
-type UserConnectEvent = {
-  client: {
-    id: number;
-    acc: string;
-  }
-}
+type UserConnectEvent = UserConnection;
 
 type UserDisconnectEvent = UserConnectEvent;
 
