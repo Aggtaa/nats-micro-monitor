@@ -1,36 +1,19 @@
-import { Broker, MicroservicePing } from 'nats-micro';
+import { BaseMicroserviceData, Broker } from 'nats-micro';
 
-import { MicroserviceInfoCollector } from './base.js';
+import { AddressMicroserviceCollector } from './address.js';
 
-export class MicroserviceRttCollector extends MicroserviceInfoCollector<number> {
+export class MicroserviceRttCollector extends AddressMicroserviceCollector<number, bigint> {
 
-  private readonly inbox: string;
-  private startTime: bigint | undefined;
-
-  constructor(private readonly broker: Broker) {
-    super();
-
-    this.inbox = this.broker.createInbox();
-    this.broker.on(this.inbox, this.handleResponse.bind(this));
+  constructor(broker: Broker) {
+    super(broker, '$SRV.PING');
   }
 
-  protected collectAll(): void {
-
-    this.startTime = process.hrtime.bigint();
-
-    this.broker.send(
-      '$SRV.PING',
-      '',
-      { replyTo: this.inbox },
-    );
+  protected prepareRequest(): bigint {
+    return process.hrtime.bigint();
   }
 
-  public collect(): void {
-    this.collectAll();
-  }
-
-  private handleResponse({ data }: { data: MicroservicePing }): void {
-    const time = Number(process.hrtime.bigint() - this.startTime);
-    this.save(data.id, Math.round(time / 1000) / 1000);
+  protected processRequest(service: BaseMicroserviceData, startTime: bigint): void {
+    const time = Number(process.hrtime.bigint() - startTime);
+    this.save(service.id, Math.round(time / 1000));
   }
 }

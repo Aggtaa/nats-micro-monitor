@@ -1,0 +1,3 @@
+directories:
+  ../../microservices:
+    nestDepth: 2

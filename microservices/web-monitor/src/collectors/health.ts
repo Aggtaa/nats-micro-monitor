@@ -19,12 +19,15 @@ export class MicroserviceHealthCollector extends MicroserviceInfoCollector<Healt
   }
 
   public async collect(service: MicroserviceInfo): Promise<void> {
-    const endpoint = service.endpoints.find((ep) => ep.name === 'health');
-    if (!endpoint)
-      return;
+    try {
+      const endpoint = service.endpoints.find((ep) => ep.name === 'health');
+      if (!endpoint)
+        return;
 
-    const result = await this.broker.request(endpoint.subject, '') as Health;
-    this.save(service.id, result);
+      const result = await this.broker.request(endpoint.subject, '') as Health;
+      this.save(service.id, result);
+    }
+    catch { /* empty */ }
   }
 
   private handleResponse(res: unknown): void {

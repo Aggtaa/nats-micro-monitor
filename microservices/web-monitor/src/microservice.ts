@@ -15,7 +15,7 @@ const statusSchema = z.object({
 
 type Status = z.infer<typeof statusSchema>;
 
-@microservice()
+@microservice({ version: '0.12.0', description: 'Microservice Monitor - backend' })
 export class WebMonitorMicroservice {
 
   public __microservice: Microservice | undefined;
@@ -39,10 +39,10 @@ export class WebMonitorMicroservice {
 
     this.monitor.on('added', (service) => {
       console.log(`SERVICE ADDED: ${service.name}.${service.id}`);
-      this.microserviceStats.collect();
+      this.microserviceStats.collect(service);
       this.microserviceHealth.collect(service);
       this.microserviceStatus.collect(service);
-      this.microserviceRtt.collect();
+      this.microserviceRtt.collect(service);
     });
     monitor.on('removed', () => {
       // console.log(`SERVICE REMOVED: ${service.name}.${service.id}`);
@@ -59,26 +59,33 @@ export class WebMonitorMicroservice {
   })
   public async services(): Promise<string> {
     try {
-      return JSON.stringify(
-        this.monitor.services
-          .map((ms) => {
-            const { firstFoundAt, lastFoundAt, ...info } = ms;
-            const stats = this.microserviceStats?.getById(ms.id);
-            const health = this.microserviceHealth?.getById(ms.id);
-            const status = this.microserviceStatus?.getById(ms.id);
-            const rtt = this.microserviceRtt?.getById(ms.id);
+      const services = this.monitor.services
+        .map((ms) => {
+          const {
+            firstFoundAt, lastFoundAt, connection, ...info
+          } = ms;
+          const stats = this.microserviceStats?.getById(ms.id);
+          const health = this.microserviceHealth?.getById(ms.id);
+          const status = this.microserviceStatus?.getById(ms.id);
+          const rtt = this.microserviceRtt?.getById(ms.id);
 
-            return {
-              firstFoundAt,
-              lastFoundAt,
-              info,
-              stats,
-              health,
-              status,
-              rtt,
-            } as MonitoredMicroservice;
-          }),
+          return {
+            firstFoundAt,
+            lastFoundAt,
+            info,
+            stats,
+            health,
+            status,
+            rtt,
+            connection,
+          } as MonitoredMicroservice;
+        });
+
+      services.sort(
+        (a, b) => a.info.name.localeCompare(b.info.name) * 100 + a.info.id.localeCompare(b.info.id),
       );
+
+      return JSON.stringify(services);
     }
     catch (err) {
       console.error(err);

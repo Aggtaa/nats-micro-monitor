@@ -9,7 +9,7 @@ const statusSchema = z.object({
 
 type Status = z.infer<typeof statusSchema>;
 
-@microservice()
+@microservice({ version: '1.0.0', description: 'Public HTTP method test' })
 export class HttpTestMicroservice {
 
   public __microservice: Microservice | undefined;

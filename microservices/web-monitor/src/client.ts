@@ -1,4 +1,4 @@
-import { Broker, Message } from 'nats-micro';
+import { NatsBroker, Message } from 'nats-micro';
 
 type UserConnectEvent = {
   client: {
@@ -10,13 +10,13 @@ type UserConnectEvent = {
 type UserDisconnectEvent = UserConnectEvent;
 
 export class Client {
-  public readonly userBroker = new Broker({
+  public readonly userBroker = new NatsBroker({
     servers: process.env.NATS_URL,
     user: process.env.NATS_USERNAME,
     pass: process.env.NATS_PASSWORD,
   });
 
-  public readonly systemBroker = new Broker({
+  public readonly systemBroker = new NatsBroker({
     servers: process.env.NATS_URL,
     user: process.env.NATS_SYSTEM_USERNAME,
     pass: process.env.NATS_SYSTEM_PASSWORD,

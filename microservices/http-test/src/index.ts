@@ -1,10 +1,10 @@
-import { Broker, Microservice } from 'nats-micro';
+import { NatsBroker, Microservice } from 'nats-micro';
 
 import { HttpTestMicroservice } from './microservice.js';
 
 (async () => {
 
-  const broker = await new Broker({
+  const broker = await new NatsBroker({
     servers: process.env.NATS_URL,
     user: process.env.NATS_USERNAME,
     pass: process.env.NATS_PASSWORD,

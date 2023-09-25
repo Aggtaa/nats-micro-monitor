@@ -14,7 +14,7 @@ import { WebMonitorMicroservice } from './microservice.js';
   const service = new WebMonitorMicroservice();
   service.start(client.userBroker, monitor);
 
-  monitor.startPeriodicDiscovery(60000, 30000);
+  monitor.startPeriodicDiscovery(5000, 3000);
 
   await Microservice.createFromClass(client.userBroker, service);
 })()
