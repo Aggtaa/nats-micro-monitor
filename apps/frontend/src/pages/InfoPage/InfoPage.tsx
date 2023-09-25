@@ -1,6 +1,6 @@
 import { observer } from "mobx-react"
 import { microserviceData } from "../../store"
-import { HealthStatus, Ping, JsonPreview } from "../../components"
+import { HealthStatus, Ping, JsonPreview, EndpointsPreview } from "../../components"
 import { toDate } from "../../utils/timeConverter"
 
 import pageStyles from '../Page.module.css'
@@ -32,7 +32,7 @@ export const InfoPage = observer(({ id }: Props) => {
                     padding: '20px'
                 }}
             >
-                <h3>general</h3>
+                <h3>General</h3>
 
                 <PropertyPreview
                     label="name"
@@ -88,7 +88,7 @@ export const InfoPage = observer(({ id }: Props) => {
                     <JsonPreview value={data?.info.metadata} />
                 </PropertyPreview>
 
-                <h3>info</h3>
+                <h3>Info</h3>
 
                 <PropertyPreview
                     label="type"
@@ -103,7 +103,7 @@ export const InfoPage = observer(({ id }: Props) => {
                 />
 
                 {data?.stats && (
-                    <h3>stats</h3>
+                    <h3>Stats</h3>
                 )}
 
                 <PropertyPreview
@@ -118,14 +118,14 @@ export const InfoPage = observer(({ id }: Props) => {
                     inline
                 />
 
-                <h3>endpoints</h3>
+                <h3>Endpoints</h3>
 
                 <PropertyPreview label="info">
-                    <JsonPreview value={data?.info.endpoints} />
+                    <EndpointsPreview endpoints={data?.info.endpoints} />
                 </PropertyPreview>
 
                 <PropertyPreview label="stats">
-                    <JsonPreview value={data?.stats?.endpoints} />
+                    <EndpointsPreview endpoints={data?.stats?.endpoints} />
                 </PropertyPreview>
             </div>
         </div>

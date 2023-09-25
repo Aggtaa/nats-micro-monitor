@@ -24,6 +24,10 @@ export const Header = () => {
                     Last seen
                 </th>
 
+                <th>
+                    IP
+                </th>
+
                 <th
                     style={{
                         minWidth: '80px',
