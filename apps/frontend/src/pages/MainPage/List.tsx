@@ -39,7 +39,7 @@ export const List = (props: Props) => {
                     {toDate(item.lastFoundAt)}
                 </td>
 
-                <td style={{ whiteSpace: 'nowrap' }}>
+                <td style={{ whiteSpace: 'nowrap', textAlign: 'right' }}>
                     {item?.connection?.client?.host}
                 </td>
 
