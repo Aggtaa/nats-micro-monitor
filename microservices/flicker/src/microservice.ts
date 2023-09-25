@@ -11,7 +11,10 @@ const flickerMicroserviceStatusSchema = z.object({
 
 type FlickerMicroserviceStatus = z.infer<typeof flickerMicroserviceStatusSchema>;
 
-@microservice({ version: '1.0.0', description: 'Just flicks its status and health every few seconds' })
+@microservice({
+  version: '1.0.0',
+  description: 'Just flicks its status and health every few seconds',
+})
 export class FlickerMicroservice {
   public microservice: Microservice | undefined;
 

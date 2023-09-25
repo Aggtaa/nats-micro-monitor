@@ -1,0 +1,6 @@
+services:
+  flicker: 
+    start: npm start
+    environment:
+      TEST: 2
+      NATS_SYSTEM_USERNAME: $NATS_SYSTEM_USERNAME

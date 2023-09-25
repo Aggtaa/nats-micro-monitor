@@ -1,0 +1,6 @@
+services:
+  http-test: 
+    start: npm start
+    environment:
+      TEST: 1
+

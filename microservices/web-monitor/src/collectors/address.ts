@@ -1,4 +1,6 @@
-import { BaseMicroserviceData, Broker, MicroserviceInfo, MicroservicePing } from 'nats-micro';
+import {
+  BaseMicroserviceData, Broker, MicroserviceInfo, MicroservicePing,
+} from 'nats-micro';
 import { isUndefined } from 'util';
 
 import { MicroserviceInfoCollector } from './base.js';
