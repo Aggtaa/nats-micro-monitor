@@ -20,3 +20,17 @@
     padding: 10px;
     /* vertical-align: top; */
 }
+
+.description {
+    width: 100%;
+}
+
+@media screen and (max-width: 1200px) {
+  .description {
+    display: none;
+  }
+
+  .id {
+    width: 100%;
+  }
+}

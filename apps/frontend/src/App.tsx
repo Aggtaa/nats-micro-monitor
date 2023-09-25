@@ -4,6 +4,7 @@ import { Pages } from './pages'
 import { Logo, HeaderMenu, Breadcrumb } from './components'
 
 import './App.css'
+import styles from './App.module.css'
 
 const { Header, Content, Footer } = Layout
 
@@ -20,7 +21,7 @@ const App: React.FC = () => {
                 <HeaderMenu />
             </Header>
 
-            <Content style={{ padding: '0 50px' }}>
+            <Content className={styles.Content}>
                 <Breadcrumb />
 
                 <div className="site-layout-content" style={{ background: colorBgContainer }}>

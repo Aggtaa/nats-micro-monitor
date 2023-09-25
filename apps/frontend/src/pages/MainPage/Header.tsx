@@ -8,11 +8,11 @@ export const Header = () => {
                     Name
                 </th>
 
-                <th>
+                <th className={styles.id}>
                     Instance ID
                 </th>
 
-                <th style={{ width: '100%' }}>
+                <th className={styles.description}>
                     Description
                 </th>
 

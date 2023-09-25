@@ -1,8 +1,7 @@
 import { Button } from "antd"
 import { MonitoredMicroservice } from "@nats-micro-monitor/types"
-
 import { HealthStatus, Ping } from "../../components"
-import { toDate } from "../../utils/timeConverter"
+import { toLastSeen } from "../../utils/timeConverter"
 
 import styles from './MainPage.module.css'
 
@@ -23,11 +22,11 @@ export const List = (props: Props) => {
                     <a href={`#page=info&id=${item.info.id}`}>{item.info.name}</a>
                 </td>
 
-                <td>
+                <td className={styles.id}>
                     <a href={`#page=info&id=${item.info.id}`}>{item.info.id}</a>
                 </td>
 
-                <td>
+                <td className={styles.description}>
                     {item.info.description}
                 </td>
 
@@ -35,8 +34,8 @@ export const List = (props: Props) => {
                     {item.info.version}
                 </td>
 
-                <td style={{ whiteSpace: 'nowrap' }}>
-                    {toDate(item.lastFoundAt)}
+                <td style={{ whiteSpace: 'nowrap', textAlign: 'right' }}>
+                    {toLastSeen(item.lastFoundAt)}
                 </td>
 
                 <td style={{ whiteSpace: 'nowrap', textAlign: 'right' }}>
