@@ -1,7 +1,9 @@
 import { observer } from "mobx-react"
 import { microserviceData } from "../../store"
-import { HealthStatus, Ping } from "../../components"
+import { HealthStatus, Ping, JsonPreview } from "../../components"
 import { toDate } from "../../utils/timeConverter"
+
+import pageStyles from '../Page.module.css'
 
 interface Props {
     id?: string;
@@ -29,54 +31,53 @@ export const InfoPage = observer(({ id }: Props) => {
     })
 
     return (
-        <div>
-            <ul
+        <div className={pageStyles.Container}>
+            <div
                 style={{
-                    listStyleType: 'none',
                     padding: '20px'
                 }}
             >
-                <li>
+                <div>
                     <b>name:</b> {data?.info.name}
-                </li>
+                </div>
 
-                <li>
+                <div>
                     <b>id</b>: {id}
-                </li>
+                </div>
 
-                <li>
+                <div>
                     <b>version</b>: {data?.info.version}
-                </li>
+                </div>
 
-                <li>
+                <div>
                     <b>firstFoundAt</b>: {firstFoundAt}
-                </li>
+                </div>
 
-                <li>
+                <div>
                     <b>lastFoundAt</b>: {lastFoundAt}
-                </li>
+                </div>
 
-                <li>
+                <div>
                     <b>health</b>: <HealthStatus status={data?.health} />
-                </li>
+                </div>
 
-                <li>
+                <div>
                     <b>ping</b>: <Ping value={data?.rtt} />
-                </li>
+                </div>
 
-                <li>
+                <div>
                     <b>metadata</b>:
 
                     <div style={{ whiteSpace: 'pre-wrap' }}>
-                        {JSON.stringify(data?.info.metadata, null, 4)}
+                        <JsonPreview value={data?.info.metadata} />
                     </div>
-                </li>
+                </div>
 
-                <li>
+                <div>
                     <h3>info</h3>
 
                     <div>
-                        <b>type</b>: {JSON.stringify(data?.info.type, null, 4)}
+                        <b>type</b>: {data?.info.type}
                     </div>
 
                     {data?.info.description && (
@@ -88,28 +89,28 @@ export const InfoPage = observer(({ id }: Props) => {
                             </div>
                         </div>
                     )}
-                </li>
+                </div>
 
-                <li>
+                <div>
                     <h3>stats</h3>
 
                     <div>
-                        <b>type</b>: {JSON.stringify(data?.stats?.type, null, 4)}
+                        <b>type</b>: {data?.stats?.type}
                     </div>
 
                     <div>
                         <b>started</b>: {toDate(data?.stats?.started)}
                     </div>
-                </li>
+                </div>
 
-                <li>
+                <div>
                     <h3>endpoints</h3>
 
                     <div style={{ whiteSpace: 'pre-wrap' }}>
-                        {JSON.stringify(endpoints, null, 4)}
+                        <JsonPreview value={endpoints} />
                     </div>
-                </li>
-            </ul>
+                </div>
+            </div>
         </div>
     )
 })

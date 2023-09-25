@@ -1,5 +1,9 @@
 import { observer } from "mobx-react"
 import { microserviceData } from "../../store"
+import { JsonPreview } from "../../components"
+
+import pageStyles from '../Page.module.css'
+import { PropertyPreview } from "../../components/PropertyPreview";
 
 interface Props {
     id?: string;
@@ -17,33 +21,34 @@ export const StatusPage = observer(({ id }: Props) => {
     const data = microserviceData.getInfoById(id)
 
     return (
-        <div>
-            <ul
+        <div className={pageStyles.Container}>
+            <div
                 style={{
-                    listStyleType: 'none',
                     padding: '20px'
                 }}
             >
-                <li>
-                    <b>name:</b> {data?.info.name}
-                </li>
+                <PropertyPreview
+                    label="name"
+                    value={data?.info.name}
+                    inline
+                />
 
-                <li>
-                    <b>id</b>: {id}
-                </li>
+                <PropertyPreview
+                    label="id"
+                    value={id}
+                    inline
+                />
 
-                <li>
-                    <b>version</b>: {data?.info.version}
-                </li>
+                <PropertyPreview
+                    label="version"
+                    value={data?.info.version}
+                    inline
+                />
 
-                <li>
-                    <b>status</b>:
-
-                    <div style={{ whiteSpace: 'pre-wrap' }}>
-                        {JSON.stringify(data?.status, null, 4)}
-                    </div>
-                </li>
-            </ul>
+                <PropertyPreview label="status">
+                    <JsonPreview value={data?.status} />
+                </PropertyPreview>
+            </div>
         </div>
     )
 })

@@ -1,5 +1,6 @@
 export { Breadcrumb } from './Breadcrumb'
 export { HeaderMenu } from './HeaderMenu'
 export { HealthStatus } from './HealthStatus'
+export { JsonPreview } from './JsonPreview'
 export { Logo } from './Logo'
 export { Ping } from './Ping'
