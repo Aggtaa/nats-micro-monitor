@@ -9,6 +9,7 @@
 .Header th {
     padding: 10px;
     text-align: left;
+    white-space: nowrap;
 }
 
 .Content {

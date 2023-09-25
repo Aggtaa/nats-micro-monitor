@@ -4,12 +4,6 @@ export const Header = () => {
     return (
         <thead className={styles.Header}>
             <tr>
-                <th />
-
-                <th>
-                    LastFoundAt
-                </th>
-
                 <th>
                     Name
                 </th>
@@ -27,7 +21,16 @@ export const Header = () => {
                 </th>
 
                 <th>
-                    RTT
+                    Last seen
+                </th>
+
+                <th
+                    style={{
+                        minWidth: '80px',
+                        textAlign: 'right'
+                    }}
+                >
+                    Ping
                 </th>
 
                 <th>

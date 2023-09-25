@@ -1,11 +1,18 @@
 import { MonitoredMicroservice } from "@nats-micro-monitor/types"
 import { action, observable, makeObservable } from "mobx"
 
-const url = "./services.json"
+const URL_SERVICES = import.meta.env.VITE_API_SERVICES_HOST
+const URL_DISCOVER = import.meta.env.VITE_API_DISCOVER_HOST
 
 export class MicroserviceData {
     constructor() {
         makeObservable(this)
+
+        // this.fetchDiscover()
+        this.fetchServices()
+
+        // setInterval(this.fetchDiscover, 5000)
+        setInterval(this.fetchServices, 1000)
     }
 
     @observable data: MonitoredMicroservice[] = []
@@ -14,9 +21,18 @@ export class MicroserviceData {
         this.data = value
     }
 
-    fetchData = async () => {
+    fetchDiscover = async () => {
         try {
-            const response = await fetch(url)
+            await fetch(URL_DISCOVER)
+
+        } catch (error) {
+            console.log("error", error)
+        }
+    }
+
+    fetchServices = async () => {
+        try {
+            const response = await fetch(URL_SERVICES)
             const json = await response.json()
 
             this.setData(json)

@@ -1,7 +1,7 @@
 import { observer } from "mobx-react"
 import { microserviceData } from "../../store"
-import { toJS } from "mobx";
-import { HealthStatus } from "../../components";
+import { HealthStatus, Ping } from "../../components"
+import { toDate } from "../../utils/timeConverter"
 
 interface Props {
     id?: string;
@@ -18,10 +18,15 @@ export const InfoPage = observer(({ id }: Props) => {
 
     const data = microserviceData.getInfoById(id)
 
-    console.log('data', toJS(data))
+    const firstFoundAt = toDate(data?.firstFoundAt)
+    const lastFoundAt = toDate(data?.lastFoundAt)
 
-    const firstFoundAt = data?.firstFoundAt && new Date(data.firstFoundAt).toLocaleString() || ''
-    const lastFoundAt = data?.lastFoundAt && new Date(data.lastFoundAt).toLocaleString() || ''
+    const endpoints = data?.info?.endpoints.map((val, index) => {
+        return {
+            ...val,
+            ...data?.stats?.endpoints[index]
+        }
+    })
 
     return (
         <div>
@@ -56,18 +61,52 @@ export const InfoPage = observer(({ id }: Props) => {
                 </li>
 
                 <li>
-                    <b>info endpoint</b>:
+                    <b>ping</b>: <Ping value={data?.rtt} />
+                </li>
+
+                <li>
+                    <b>metadata</b>:
 
                     <div style={{ whiteSpace: 'pre-wrap' }}>
-                        {JSON.stringify(data?.info.endpoints, null, 4)}
+                        {JSON.stringify(data?.info.metadata, null, 4)}
                     </div>
                 </li>
 
                 <li>
-                    <b>info stats</b>:
+                    <h3>info</h3>
+
+                    <div>
+                        <b>type</b>: {JSON.stringify(data?.info.type, null, 4)}
+                    </div>
+
+                    {data?.info.description && (
+                        <div>
+                            <b>description</b>:
+
+                            <div style={{ whiteSpace: 'pre-wrap' }}>
+                                {data?.info.description}
+                            </div>
+                        </div>
+                    )}
+                </li>
+
+                <li>
+                    <h3>stats</h3>
+
+                    <div>
+                        <b>type</b>: {JSON.stringify(data?.stats?.type, null, 4)}
+                    </div>
+
+                    <div>
+                        <b>started</b>: {toDate(data?.stats?.started)}
+                    </div>
+                </li>
+
+                <li>
+                    <h3>endpoints</h3>
 
                     <div style={{ whiteSpace: 'pre-wrap' }}>
-                        {JSON.stringify(data?.stats, null, 4)}
+                        {JSON.stringify(endpoints, null, 4)}
                     </div>
                 </li>
             </ul>

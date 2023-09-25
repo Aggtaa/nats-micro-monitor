@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { Health } from '@nats-micro-monitor/types';
+import { Health } from '@nats-micro-monitor/types'
 
 import styles from './HealthStatus.module.css'
 

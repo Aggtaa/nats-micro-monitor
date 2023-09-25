@@ -1,7 +1,8 @@
 import { Button } from "antd"
 import { MonitoredMicroservice } from "@nats-micro-monitor/types"
 
-import { HealthStatus } from "../../components"
+import { HealthStatus, Ping } from "../../components"
+import { toDate } from "../../utils/timeConverter"
 
 import styles from './MainPage.module.css'
 
@@ -13,27 +14,17 @@ export const List = (props: Props) => {
     const { items = [] } = props
 
     return items.map((item, index) => {
-        const time = new Date(item.lastFoundAt).toLocaleString()
-
         return (
             <tr
                 key={index}
                 className={styles.ListItem}
             >
-                <td>
-                    <b>#{index + 1}</b>
-                </td>
-
-                <td style={{ whiteSpace: "nowrap" }}>
-                    {time}
-                </td>
-
-                <td style={{ whiteSpace: "nowrap" }}>
-                    {item.info.name}
+                <td style={{ whiteSpace: 'nowrap' }}>
+                    <a href={`#page=info&id=${item.info.id}`}>{item.info.name}</a>
                 </td>
 
                 <td>
-                    {item.info.id}
+                    <a href={`#page=info&id=${item.info.id}`}>{item.info.id}</a>
                 </td>
 
                 <td>
@@ -44,8 +35,17 @@ export const List = (props: Props) => {
                     {item.info.version}
                 </td>
 
-                <td>
-                    {item.rtt}
+                <td style={{ whiteSpace: 'nowrap' }}>
+                    {toDate(item.lastFoundAt)}
+                </td>
+
+                <td
+                    style={{
+                        whiteSpace: 'nowrap',
+                        textAlign: 'right',
+                    }}
+                >
+                    <Ping value={item.rtt} />
                 </td>
 
                 <td style={{ textAlign: 'center' }}>
@@ -57,7 +57,9 @@ export const List = (props: Props) => {
                 </td>
 
                 <td style={{ textAlign: 'center' }}>
-                    <a href={`#page=status&id=${item.info.id}`}>Status</a>
+                    {item?.status && (
+                        <a href={`#page=status&id=${item.info.id}`}>Status</a>
+                    )}
                 </td>
 
                 <td style={{ textAlign: 'center' }}>

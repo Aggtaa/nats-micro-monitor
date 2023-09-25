@@ -24,14 +24,6 @@ export const HeaderMenu = observer(() => {
                     }
                 },
                 {
-                    key: RouteName.INFO,
-                    label: 'Info',
-                },
-                {
-                    key: RouteName.STATUS,
-                    label: 'Status',
-                },
-                {
                     key: '4',
                     label: 'About',
                 },

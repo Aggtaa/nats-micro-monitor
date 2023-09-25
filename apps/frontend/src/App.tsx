@@ -1,6 +1,4 @@
-import { useEffect } from 'react'
 import { Layout, theme } from 'antd'
-import { microserviceData } from "./store"
 
 import { Pages } from './pages'
 import { Logo, HeaderMenu, Breadcrumb } from './components'
@@ -10,10 +8,6 @@ import './App.css'
 const { Header, Content, Footer } = Layout
 
 const App: React.FC = () => {
-    useEffect(() => {
-        microserviceData.fetchData()
-    }, [])
-
     const {
         token: { colorBgContainer },
     } = theme.useToken()
