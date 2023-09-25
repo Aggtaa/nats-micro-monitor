@@ -1,7 +1,6 @@
 import {
   BaseMicroserviceData, Broker, MicroserviceInfo, MicroservicePing,
 } from 'nats-micro';
-import { isUndefined } from 'util';
 
 import { MicroserviceInfoCollector } from './base.js';
 
@@ -43,10 +42,11 @@ export abstract class AddressMicroserviceCollector<T, P> extends MicroserviceInf
   private handleResponse({ data }: { data: MicroservicePing }): void {
 
     const subject = this.getSubject(data);
-    const precursor = this.requests[subject];
-    if (isUndefined(precursor))
-      return;
 
-    this.processRequest(data, precursor);
+    if (subject in this.requests) {
+      const precursor = this.requests[subject];
+      delete (this.requests[subject]);
+      this.processRequest(data, precursor);
+    }
   }
 }
