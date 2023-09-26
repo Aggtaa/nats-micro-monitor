@@ -14,12 +14,12 @@ import { CoordinatorMicroservice } from './microservice.js';
 
   const coordinator = new Coordinator(process.env.MICROSERVICE_NODE_NAME ?? 'local', broker);
   const service = new CoordinatorMicroservice(coordinator);
-  await Microservice.createFromClass(broker, service);
+  await Microservice.createFromClass(broker, service, { noStopMethod: true });
 
   const config = {
     directories: [
       {
-        path: resolve('../../microservices'),
+        path: resolve('..'),
         nestDepth: 2,
       },
     ],
