@@ -1,4 +1,4 @@
-import { Health, MonitoredMicroservice } from '@nats-micro-monitor/types';
+import { Feature, Health, MonitoredMicroservice } from '@nats-micro-monitor/types';
 import {
   microservice, method, z, Microservice, Monitor,
   Broker,
@@ -8,6 +8,7 @@ import { MicroserviceHealthCollector } from './collectors/health.js';
 import { MicroserviceRttCollector } from './collectors/rtt.js';
 import { MicroserviceStatsCollector } from './collectors/stats.js';
 import { MicroserviceStatusCollector } from './collectors/status.js';
+import { debug } from './debug.js';
 
 const statusSchema = z.object({
   dummy: z.string(),
@@ -86,6 +87,44 @@ export class WebMonitorMicroservice {
       );
 
       return JSON.stringify(services);
+    }
+    catch (err) {
+      console.error(err);
+      throw err;
+    }
+  }
+
+  @method({
+    metadata: {
+      'nats-micro.v1.http.endpoint.path': 'features.json',
+    },
+  })
+  public async features(): Promise<string> {
+    try {
+      const features: Feature[] = [];
+
+      for (const service of this.monitor.services) {
+        for (const endpoint of service.endpoints) {
+          if ('nats.micro.ext.v1.feature' in endpoint.metadata) {
+            const paramsStr = endpoint.metadata['nats.micro.ext.v1.feature.params'];
+            try {
+              features.push({
+                feature: endpoint.metadata['nats.micro.ext.v1.feature'],
+                params: JSON.parse(paramsStr),
+              });
+            }
+            catch {
+              debug.info(`Unable to parse feature params "${paramsStr}" for ${service.name} endpoint ${endpoint.name}`);
+            }
+          }
+        }
+      }
+
+      features.sort(
+        (a, b) => a.feature.localeCompare(b.feature),
+      );
+
+      return JSON.stringify(features);
     }
     catch (err) {
       console.error(err);

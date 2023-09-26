@@ -25,6 +25,7 @@ export type ServiceConfig = {
   workDir: string;
   environment?: Record<string, string>;
   start: string;
+  features?: string[];
   // stop: string;
 }
 
