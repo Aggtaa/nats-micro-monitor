@@ -37,6 +37,9 @@ export class FakeMicroservice<T> {
           },
         },
       }),
+      {
+        noStopMethod: true,
+      },
     );
   }
 

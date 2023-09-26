@@ -23,12 +23,11 @@
   "homepage": "https://github.com/Aggtaa/nats-micro-monitor#readme",
   "workspaces": [
     "apps/*",
-    "microservices/*",
     "libs/*"
   ],
   "dependencies": {
     "@prisma/client": "^5.2.0",
-    "nats-micro": "^0.21.0"
+    "nats-micro": "^0.21.2"
   },
   "devDependencies": {
     "@types/chai": "^4.2.11",
