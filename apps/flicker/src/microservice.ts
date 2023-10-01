@@ -58,6 +58,13 @@ export class FlickerMicroservice {
   }
 
   @method()
+  public async health(): Promise<Health> {
+    return {
+      value: this.currentHealth,
+    };
+  }
+
+  @method()
   public async status(): Promise<FlickerMicroserviceStatus> {
     return {
       timesFlicked: this.timesFlicked,

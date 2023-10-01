@@ -1,3 +1,4 @@
+import bodyParser from 'body-parser';
 import cors from 'cors';
 import express from 'express';
 import { Microservice, Monitor, NatsBroker } from 'nats-micro';
@@ -23,33 +24,38 @@ import { Router } from './router.js';
 
   await sysBroker.connect();
 
+  const service = new HttpGatewayMicroservice();
+  Microservice.createFromClass(broker, service);
+
   const router = new Router(broker);
+  service.start(router);
 
   const monitor = new Monitor(broker, sysBroker);
 
-  monitor.on('added', (service) => {
-    router.addServiceRoutes(service);
+  monitor.on('added', (svc) => {
+    router.addServiceRoutes(svc);
   });
 
-  monitor.on('removed', (service) => {
-    router.removeServiceRoutes(service);
+  monitor.on('removed', (svc) => {
+    router.removeServiceRoutes(svc);
   });
 
-  monitor.on('change', (services) => {
+  monitor.on('change', (svcs) => {
     router.clearRoutes();
-    for (const service of services)
-      router.addServiceRoutes(service);
+    for (const svc of svcs)
+      router.addServiceRoutes(svc);
   });
 
-  monitor.startPeriodicDiscovery(60000, 10000);
-
-  const service = new HttpGatewayMicroservice();
-  service.start(router);
-  Microservice.createFromClass(broker, service);
+  // monitor.startPeriodicDiscovery(5000, 3000);
 
   const app = express();
 
   app.use(cors());
+
+  app.use(bodyParser.urlencoded({ extended: true }));
+  app.use(bodyParser.json());
+  app.use(bodyParser.raw());
+  app.use(bodyParser.text());
 
   app.use(router.middleware.bind(router));
 

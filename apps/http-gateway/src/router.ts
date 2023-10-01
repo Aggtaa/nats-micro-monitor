@@ -135,14 +135,13 @@ export class Router {
     );
     this.broker.on(replyToSubj, handler);
 
-    const headers = Object.entries(req.headers)
-      .map(([k, v]) => ([k, [String(v)]] as [string, string[]]));
+    const headers = Object.entries(req.headers) as [string, string][];
     this.broker.send(
       method.subject,
       {
 
         headers: req.headers,
-        body: 'req.body',
+        body: req.body,
         domain: this.domain,
         method: req.method,
         url: req.originalUrl,
