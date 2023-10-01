@@ -1,21 +1,20 @@
 import { Microservice, Monitor } from 'nats-micro';
 
-import { Client } from './client.js';
+import { Brokers } from './brokers.js';
 import { WebMonitorMicroservice } from './microservice.js';
 
 (async () => {
 
-  const client = new Client();
+  const brokers = new Brokers();
+  await brokers.connect();
 
-  await client.connect();
-
-  const monitor = new Monitor(client.userBroker, client.systemBroker);
+  const monitor = new Monitor(brokers.userBroker, brokers.systemBroker);
 
   const service = new WebMonitorMicroservice();
-  service.start(client.userBroker, monitor);
+  service.start(brokers.userBroker, monitor);
 
   monitor.startPeriodicDiscovery(5000, 3000);
 
-  await Microservice.createFromClass(client.userBroker, service);
+  await Microservice.createFromClass(brokers.userBroker, service);
 })()
   .catch(console.error);
