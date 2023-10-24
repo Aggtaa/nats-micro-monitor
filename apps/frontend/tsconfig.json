@@ -1,20 +1,26 @@
 {
   "compilerOptions": {
-    "target": "es2020",
-    "rootDir": "src",
-    "outDir": "dist",
-    "module": "Node16",
-    "sourceMap": false,
-    "esModuleInterop": true,
-    "experimentalDecorators": true,
-    "resolveJsonModule": true,
-    "lib": [ "es5", "es6", "es2020", "DOM", "DOM.Iterable" ],
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
     "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "experimentalDecorators": true
   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["node_modules", ".eslintrc.js"],
-  "ts-node": {
-    "esm": true,
-    "experimentalSpecifierResolution": "node"
-  }
+  "include": ["src"],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }
