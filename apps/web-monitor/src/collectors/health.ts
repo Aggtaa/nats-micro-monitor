@@ -24,7 +24,7 @@ export class MicroserviceHealthCollector extends MicroserviceInfoCollector<Healt
       if (!endpoint)
         return;
 
-      const result = await this.broker.request(endpoint.subject, '') as Health;
+      const result = (await this.broker.request(endpoint.subject, '')).data as Health;
       this.save(service.id, result);
     }
     catch { /* empty */ }

@@ -16,7 +16,7 @@ export class FakeMicroservice<T> {
   public async start(): Promise<void> {
     this.ms = await Microservice.create(
       this.broker,
-      {
+      () => ({
         name: this.name,
         description: this.description,
         version: this.version,
@@ -30,8 +30,15 @@ export class FakeMicroservice<T> {
             local: true,
             unbalanced: true,
             handler: (msg) => this.startCallback(msg),
+            metadata: {
+              'nats.micro.ext.v1.feature': 'microservice_start',
+              'nats.micro.ext.v1.feature.params': `{"name": "${this.name}", "id": "${this.ms?.id}"}`,
+            },
           },
         },
+      }),
+      {
+        noStopMethod: true,
       },
     );
   }

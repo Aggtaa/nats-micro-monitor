@@ -12,6 +12,7 @@ const flickerMicroserviceStatusSchema = z.object({
 type FlickerMicroserviceStatus = z.infer<typeof flickerMicroserviceStatusSchema>;
 
 @microservice({
+  name: 'flicker',
   version: '1.0.0',
   description: 'Just flicks its status and health every few seconds',
 })
@@ -32,15 +33,6 @@ export class FlickerMicroservice {
       this.deathTimer = setTimeout(this.die.bind(this), lifeSpan * 1000);
   }
 
-  public async stop(): Promise<void> {
-    clearInterval(this.flickTimer);
-    if (this.deathTimer)
-      clearTimeout(this.deathTimer);
-
-    if (this.microservice)
-      await this.microservice.stop();
-  }
-
   private do(): void {
     if (this.currentHealth === 'green')
       this.currentHealth = 'yellow';
@@ -56,11 +48,19 @@ export class FlickerMicroservice {
     this.stop();
   }
 
+  public async stop(): Promise<void> {
+    clearInterval(this.flickTimer);
+    if (this.deathTimer)
+      clearTimeout(this.deathTimer);
+
+    if (this.microservice)
+      await this.microservice.stop();
+  }
+
   @method()
   public async health(): Promise<Health> {
     return {
       value: this.currentHealth,
-      reason: this.currentHealth === 'red' ? 'Ouch!' : undefined,
     };
   }
 
