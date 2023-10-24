@@ -23,10 +23,6 @@ export const HeaderMenu = observer(() => {
                         })
                     }
                 },
-                {
-                    key: '4',
-                    label: 'About',
-                },
             ]}
         />
     )

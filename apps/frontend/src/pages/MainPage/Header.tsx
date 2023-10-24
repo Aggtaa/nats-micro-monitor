@@ -21,10 +21,6 @@ export const Header = () => {
                 </th>
 
                 <th>
-                    Last seen
-                </th>
-
-                <th>
                     IP
                 </th>
 
@@ -48,8 +44,6 @@ export const Header = () => {
                 <th>
                     Status
                 </th>
-
-                <th style={{ textAlign: 'center' }} />
             </tr>
         </thead>
     )

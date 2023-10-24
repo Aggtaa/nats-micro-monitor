@@ -12,17 +12,18 @@
 }
 
 .Content {
-    /* display: flex;
-    margin-bottom: 10px; */
 }
 
 .ListItem td {
     padding: 10px;
-    /* vertical-align: top; */
 }
 
 .description {
     width: 100%;
+}
+
+.id {
+  white-space: nowrap;
 }
 
 @media screen and (max-width: 1200px) {

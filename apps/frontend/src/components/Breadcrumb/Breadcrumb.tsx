@@ -6,11 +6,21 @@ import { RouteName } from "../../store/Router"
 
 import styles from './Breadcrumb.module.css'
 
+type BreadcrumbItem = {
+    title: string;
+    href?: string;
+}
+
 export const Breadcrumb = observer(() => {
     const { name } = router.page
 
-    const items = [
-        { title: 'Home' }
+    const items: BreadcrumbItem[] = [
+        {
+            title: 'Home',
+            href: (name != RouteName.HOME)
+                ? '#page=home'
+                : undefined
+        },
     ]
 
     if (name == RouteName.INFO) {

@@ -1,7 +1,7 @@
 import { Layout, theme } from 'antd'
 
 import { Pages } from './pages'
-import { Logo, HeaderMenu, Breadcrumb } from './components'
+import { Logo, Breadcrumb } from './components'
 
 import './App.css'
 import styles from './App.module.css'
@@ -17,8 +17,6 @@ const App: React.FC = () => {
         <Layout className="layout">
             <Header style={{ display: 'flex', alignItems: 'center' }}>
                 <Logo />
-
-                <HeaderMenu />
             </Header>
 
             <Content className={styles.Content}>
@@ -30,7 +28,7 @@ const App: React.FC = () => {
             </Content>
 
             <Footer style={{ textAlign: 'center' }}>
-                Nats Micro Monitor v1.0.0
+                NATS Micro Monitor v1.0.0
             </Footer>
         </Layout>
     )

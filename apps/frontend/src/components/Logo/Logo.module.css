@@ -9,3 +9,9 @@
     line-height: 32px;
     text-align: center;
 }
+
+.Logo a,
+.Logo a:hover {
+    display: block;
+    color: #fff;
+}
