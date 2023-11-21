@@ -1,8 +1,9 @@
-import { HttpEndpoint } from '@nats-micro-monitor/types';
+import { SubjectHttpRoute } from '@nats-micro-monitor/types';
 import { threadContext } from 'debug-threads-ns';
 import { Request, Response, NextFunction } from 'express';
 import {
   MicroserviceInfo, MethodInfo, Broker, wrapMethod,
+  Request as MicroRequest,
 } from 'nats-micro';
 import { join } from 'path';
 import { isUndefined } from 'util';
@@ -15,18 +16,10 @@ export type HttpRequest = {
   method: string,
   headers: Record<string, string>,
   body: string,
-}
-
-export type Route = {
-  path: string,
-  methods: string,
-  domain: string,
-  microservice: string,
-  endpoint: string,
-}
+};
 
 export class Router {
-  private readonly methods: HttpEndpoint[] = [];
+  public routes: SubjectHttpRoute[] = [];
 
   constructor(
     private readonly broker: Broker,
@@ -44,10 +37,10 @@ export class Router {
         return;
       }
 
-      for (const method of this.methods) {
+      for (const method of this.routes) {
         const match = this.matchMethod(req, method);
-        if (match) {
-          debug.web.thread.info(`${req.method} ${req.originalUrl} request mapped to ${method.microservice.name}.${method.microservice.id} ${method.microserviceEndpoint.name}`);
+        if (!isUndefined(match)) {
+          debug.web.thread.info(`${req.method} ${req.originalUrl} request mapped to ${method.microservice} "${method.subject}"`);
           this.forwardToService(req, res, match);
           return;
         }
@@ -77,24 +70,11 @@ export class Router {
     );
   }
 
-  public get routes(): Route[] {
-    const routes = this.methods
-      .map((m) => ({
-        path: m.path,
-        methods: m.methods.join('|'),
-        domain: m.domain,
-        microservice: m.microservice.name,
-        endpoint: m.microserviceEndpoint.name,
-      }));
-
-    return routes;
-  }
-
   public serveRoutes(req: Request, res: Response): void {
     res.json(this.routes);
   }
 
-  private matchMethod(req: Request, method: HttpEndpoint): MethodInfo | undefined {
+  private matchMethod(req: Request, method: SubjectHttpRoute): SubjectHttpRoute | undefined {
     if ((method.domain ?? '') !== this.domain)
       return undefined;
 
@@ -107,10 +87,10 @@ export class Router {
     )
       return undefined;
 
-    return method.microserviceEndpoint;
+    return method;
   }
 
-  private forwardToService(req: Request, res: Response, method: MethodInfo) {
+  private forwardToService(req: Request, res: Response, method: SubjectHttpRoute) {
 
     const start = process.hrtime.bigint();
 
@@ -125,13 +105,16 @@ export class Router {
 
     const handler = wrapMethod(
       this.broker,
-      (data) => {
+      (rq: MicroRequest<unknown>) => {
         debug.web.thread.info(`Recevied microservice response in ${measureTime()}ms`);
-        res.send(data);
+        res.send(rq.data);
         closeConnection();
         this.broker.off(replyToSubj, handler);
       },
-      method.subject,
+      {
+        // microservice: 'http-gateway',
+        method: 'http-response',
+      },
     );
     this.broker.on(replyToSubj, handler);
 
@@ -154,26 +137,33 @@ export class Router {
   }
 
   public clearRoutes(): void {
-    this.methods.splice(0);
+    this.routes = [];
   }
 
   public addServiceRoutes(microservice: MicroserviceInfo): void {
+    this.removeServiceRoutes(microservice.id);
     for (const endpoint of microservice.endpoints)
       this.addMethodRoute(microservice, endpoint);
   }
 
   public addMethodRoute(microservice: MicroserviceInfo, method: MethodInfo): void {
-    const endpoint = this.makeEndpoint(microservice, method);
-    if (endpoint)
-      this.methods.push(endpoint);
+    this.removeMethodRoute(microservice.id, method.name);
+    const route = this.makeRouteFromMeta(microservice, method);
+    if (route)
+      this.routes.push(route);
   }
 
-  makeEndpoint(
-    microservice: MicroserviceInfo,
-    microserviceEndpoint: MethodInfo,
-  ): HttpEndpoint | undefined {
+  public addRoute(route: SubjectHttpRoute): void {
+    this.removeMethodRoute(route.microservice, route.subject);
+    this.routes.push(route);
+  }
 
-    const meta = microserviceEndpoint.metadata;
+  makeRouteFromMeta(
+    microservice: MicroserviceInfo,
+    method: MethodInfo,
+  ): SubjectHttpRoute | undefined {
+
+    const meta = method.metadata;
 
     const path = meta?.['nats-micro.v1.http.endpoint.path'];
 
@@ -189,26 +179,24 @@ export class Router {
         .map((m: string) => m.trim().toUpperCase());
 
     return {
-      microservice,
-      microserviceEndpoint,
+      microservice: microservice.id,
+      subject: method.subject,
       domain,
       path: join('/', microservice.name, path),
       methods,
     };
   }
 
-  public removeServiceRoutes(microservice: MicroserviceInfo): void {
-    for (const endpoint of microservice.endpoints)
-      this.removeMethodRoute(microservice.id, endpoint);
+  public removeServiceRoutes(microserviceId: string): void {
+    this.routes = this.routes
+      .filter((m) => m.microservice !== microserviceId);
   }
 
-  public removeMethodRoute(microserviceId: string, method: MethodInfo): void {
-    const idx = this.methods.findIndex(
-      (m) =>
-        m.microservice.id === microserviceId && m.microserviceEndpoint.name === method.name,
-    );
-
-    if (idx >= 0)
-      this.methods.splice(idx, 1);
+  public removeMethodRoute(microserviceId: string, subject: string): void {
+    this.routes = this.routes
+      .filter(
+        (m) =>
+          m.microservice !== microserviceId || m.subject !== subject,
+      );
   }
 }

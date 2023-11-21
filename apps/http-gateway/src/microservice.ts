@@ -1,15 +1,25 @@
-import { Health } from '@nats-micro-monitor/types';
+import { Health, HttpRoute, SubjectHttpRoute } from '@nats-micro-monitor/types';
 import {
   microservice, method, z, Microservice,
+  Request, Response,
 } from 'nats-micro';
 
-import { Route, Router } from './router.js';
+import { Router } from './router.js';
 
 const statusSchema = z.object({
-  routes: z.custom<Route[]>(),
+  routes: z.custom<HttpRoute[]>(),
 });
 
 type Status = z.infer<typeof statusSchema>;
+
+const changedRouteSchema = z.custom<SubjectHttpRoute>();
+
+const changeRouteRequestSchema = z.object({
+  route: changedRouteSchema,
+  change: z.enum(['change', 'delete']),
+});
+
+type ChangeRouteRequest = z.infer<typeof changeRouteRequestSchema>;
 
 @microservice({ version: '0.15.1', description: 'Microservice HTTP gateway' })
 export class HttpGatewayMicroservice {
@@ -22,17 +32,30 @@ export class HttpGatewayMicroservice {
     this.router = router;
   }
 
-  @method()
-  public async health(): Promise<Health> {
-    return {
-      value: 'green',
-    };
+  @method<ChangeRouteRequest, void>({
+    unbalanced: true,
+  })
+  public route(req: Request<ChangeRouteRequest>): void {
+    if (req.data.change === 'delete')
+      this.router.removeMethodRoute(
+        req.data.route.microservice,
+        req.data.route.subject,
+      );
+    else
+      this.router.addRoute(req.data.route);
   }
 
-  @method()
-  public async status(): Promise<Status> {
-    return {
+  @method<unknown, Health>()
+  public health(req: Request<unknown>, res: Response<Health>): void {
+    res.send({
+      value: 'green',
+    });
+  }
+
+  @method<unknown, Status>()
+  public status(req: Request<unknown>, res: Response<Status>): void {
+    res.send({
       routes: this.router?.routes ?? [],
-    };
+    });
   }
 }

@@ -1,0 +1,3 @@
+services:
+  authenticator: 
+    start: npm start

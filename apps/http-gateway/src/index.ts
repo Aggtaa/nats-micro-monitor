@@ -37,7 +37,7 @@ import { Router } from './router.js';
   });
 
   monitor.on('removed', (svc) => {
-    router.removeServiceRoutes(svc);
+    router.removeServiceRoutes(svc.id);
   });
 
   monitor.on('change', (svcs) => {

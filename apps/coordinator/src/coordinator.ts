@@ -1,4 +1,4 @@
-import { exec, spawn } from 'child_process';
+import { exec } from 'child_process';
 import { promises as fs } from 'fs';
 import yaml from 'js-yaml';
 import json5 from 'json5';

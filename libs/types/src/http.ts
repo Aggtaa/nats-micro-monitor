@@ -2,18 +2,26 @@ import {
   MicroserviceInfo, MethodInfo,
 } from 'nats-micro';
 
-export type HttpRequest = {
+export type HttpRequest<T = unknown> = {
   domain: string,
   url: string,
   method: string,
   headers: Record<string, string>,
-  body: string,
+  body: T,
 };
 
-export type HttpEndpoint = {
+export type HttpRoute = {
+  domain: string,
+  path: string,
+  methods: string[],
+};
+
+export type SubjectHttpRoute = HttpRoute & {
+  microservice: string;
+  subject: string;
+};
+
+export type HttpEndpoint = HttpRoute & {
   microservice: MicroserviceInfo;
-  microserviceEndpoint: MethodInfo;
-  domain?: string;
-  path: string;
-  methods: string[];
-}
+  endpoint: MethodInfo;
+};
