@@ -1,6 +1,7 @@
 import { Health } from '@nats-micro-monitor/types';
 import {
   microservice, method, z, Microservice,
+  Request, Response,
 } from 'nats-micro';
 import { clearInterval } from 'timers';
 
@@ -57,18 +58,24 @@ export class FlickerMicroservice {
       await this.microservice.stop();
   }
 
-  @method()
-  public async health(): Promise<Health> {
-    return {
+  @method({
+    request: z.void(),
+    response: z.custom<Health>(),
+  })
+  public health(_req: Request<void>, res: Response<Health>): void {
+    res.send({
       value: this.currentHealth,
-    };
+    });
   }
 
-  @method()
-  public async status(): Promise<FlickerMicroserviceStatus> {
-    return {
+  @method({
+    request: z.void(),
+    response: z.custom<FlickerMicroserviceStatus>(),
+  })
+  public status(_req: Request<void>, res: Response<FlickerMicroserviceStatus>): void {
+    res.send({
       timesFlicked: this.timesFlicked,
       randomString: String(Math.random()).substring(2),
-    };
+    });
   }
 }
