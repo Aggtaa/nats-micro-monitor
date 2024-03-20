@@ -1,7 +1,7 @@
 import { Feature, Health, MonitoredMicroservice } from '@nats-micro-monitor/types';
 import {
   microservice, method, z, Microservice, Monitor,
-  Broker,
+  Broker, Request, Response,
 } from 'nats-micro';
 
 import { MicroserviceHealthCollector } from './collectors/health.js';
@@ -54,11 +54,13 @@ export class WebMonitorMicroservice {
   }
 
   @method({
+    request: z.void(),
+    response: z.custom<string>(),
     metadata: {
       'nats-micro.v1.http.endpoint.path': 'services.json',
     },
   })
-  public async services(): Promise<string> {
+  public async services(_req: Request<void>, res: Response<string>): Promise<void> {
     try {
       const services = this.monitor.services
         .map((ms) => {
@@ -86,7 +88,7 @@ export class WebMonitorMicroservice {
         (a, b) => a.info.name.localeCompare(b.info.name) * 100 + a.info.id.localeCompare(b.info.id),
       );
 
-      return JSON.stringify(services);
+      res.send(JSON.stringify(services));
     }
     catch (err) {
       console.error(err);
@@ -95,11 +97,13 @@ export class WebMonitorMicroservice {
   }
 
   @method({
+    request: z.void(),
+    response: z.custom<string>(),
     metadata: {
       'nats-micro.v1.http.endpoint.path': 'features.json',
     },
   })
-  public async features(): Promise<string> {
+  public features(_req: Request<void>, res: Response<string>): void {
     try {
       const features: Feature[] = [];
 
@@ -124,7 +128,7 @@ export class WebMonitorMicroservice {
         (a, b) => a.feature.localeCompare(b.feature),
       );
 
-      return JSON.stringify(features);
+      res.send(JSON.stringify(features));
     }
     catch (err) {
       console.error(err);
@@ -132,17 +136,23 @@ export class WebMonitorMicroservice {
     }
   }
 
-  @method()
-  public async health(): Promise<Health> {
-    return {
+  @method({
+    request: z.void(),
+    response: z.custom<Health>(),
+  })
+  public health(_req: Request<void>, res: Response<Health>): void {
+    res.send({
       value: 'green',
-    };
+    });
   }
 
-  @method()
-  public async status(): Promise<Status> {
-    return {
+  @method({
+    request: z.void(),
+    response: z.custom<Status>(),
+  })
+  public status(_req: Request<void>, res: Response<Status>): void {
+    res.send({
       dummy: 'hello',
-    };
+    });
   }
 }
