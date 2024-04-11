@@ -1,0 +1,33 @@
+{
+  "name": "@nats-micro-monitor/http-large-response-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index",
+  "scripts": {
+    "start": "sh -ac '. ../../.env; ts-node --esm src/index.ts'",
+    "lint": "eslint . --ext .ts,.tsx",
+    "test": "npx nyc --reporter=html ts-mocha"
+  },
+  "type": "module",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@nats-micro-monitor/types": "*"
+  },
+  "mocha": {
+    "spec": "tests",
+    "extension": [
+      "ts"
+    ],
+    "ignore": [
+      "**/*.include.ts"
+    ],
+    "recursive": true,
+    "asyncOnly": true,
+    "exit": true,
+    "timeout": 10000,
+    "fullTrace": true,
+    "bail": true
+  }
+}
