@@ -12,5 +12,7 @@ import { FlickerMicroservice } from './microservice.js';
 
   const flicker = new FlickerMicroservice(3, -1);
   flicker.microservice = await Microservice.createFromClass(broker, flicker);
+
+  flicker.microservice.on('close', () => broker.disconnect());
 })()
   .catch(console.error);
