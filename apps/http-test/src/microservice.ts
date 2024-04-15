@@ -35,10 +35,20 @@ export class HttpTestMicroservice {
     metadata: {
       'nats-micro.v1.http.endpoint.path': 'test',
     },
-
   })
   public test(req: Request<HttpRequest>, res: Response<string>): void {
     res.send(`Current time at ${req.data.url} is ${new Date().toLocaleString()}`);
+  }
+
+  @method({
+    request: z.custom<HttpRequest>(),
+    response: z.void(),
+    metadata: {
+      'nats-micro.v1.http.endpoint.path': 'user/:user/profile',
+    },
+  })
+  public error(req: Request<HttpRequest>, res: Response<void>): void {
+    new RegExp('a')
   }
 
   @method({
