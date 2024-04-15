@@ -1,10 +1,9 @@
 import { Health, HttpRequest } from '@nats-micro-monitor/types';
+import fs from 'fs';
 import {
   microservice, method, z, Microservice,
   Request, Response,
 } from 'nats-micro';
-
-import fs from 'fs';
 
 const microserviceStatusSchema = z.object({
 });
@@ -27,43 +26,9 @@ export class MS {
       'nats-micro.v1.http.endpoint.methods': 'GET',
     },
   })
-  public index(_req: Request<HttpRequest>, res: Response<string>): void {
-
-    // type Node = {
-    //   text: string;
-    //   children: Node[];
-    // };
-
-    // function addChildren(node: Node, depth: number) {
-    //   console.log(depth);
-    //   for (let i = 0; i < 10; i++) {
-    //     const child: Node = {
-    //       text: Math.random().toString().repeat(20), children: [],
-    //     };
-    //     node.children.push(child);
-    //     if (depth < 10)
-    //       addChildren(child, depth + 1);
-    //   }
-    // }
-
-    // const root = {
-    //   text: 'root',
-    //   children: [],
-    // };
-
-    // addChildren(root, 0);
-
-    // res.send(JSON.stringify(root));
+  public large(_req: Request<HttpRequest>, res: Response<string>): void {
     res.send(fs.readFileSync('./file.txt', 'utf8'));
   }
-
-  @method({
-    request: z.void(),
-    response: z.void(),
-  })
-  public ep1(_req: Request<void>, res: Response<void>): void {
-    res.send(undefined);
-  };
 
   @method({
     request: z.void(),
@@ -73,7 +38,7 @@ export class MS {
     res.send({
       value: 'green',
     });
-  };
+  }
 
   @method({
     request: z.void(),

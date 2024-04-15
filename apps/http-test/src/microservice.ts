@@ -1,4 +1,4 @@
-import { Health, HttpRequest } from '@nats-micro-monitor/types';
+import { Health, HttpRequest, StatusError } from '@nats-micro-monitor/types';
 import {
   microservice, method, z, Microservice,
   Request, Response,
@@ -44,11 +44,12 @@ export class HttpTestMicroservice {
     request: z.custom<HttpRequest>(),
     response: z.void(),
     metadata: {
-      'nats-micro.v1.http.endpoint.path': 'user/:user/profile',
+      'nats-micro.v1.http.endpoint.path': 'error',
     },
   })
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public error(req: Request<HttpRequest>, res: Response<void>): void {
-    new RegExp('a')
+    throw new StatusError(501, 'Not Implemented');
   }
 
   @method({
